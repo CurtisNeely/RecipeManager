@@ -14,6 +14,5 @@ namespace RecipeManager.Models
 
         [Required, Display(Name = "Last Name")]
         public string LastName { get; set; }
-        public bool IsAdmin { get; set; }
     }
 }
