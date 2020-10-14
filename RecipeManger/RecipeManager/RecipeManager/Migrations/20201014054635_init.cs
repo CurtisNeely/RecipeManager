@@ -130,7 +130,7 @@ namespace RecipeManager.Migrations
                     Time = table.Column<string>(nullable: true),
                     Servings = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    Photo = table.Column<string>(nullable: true),
+                    Photo = table.Column<byte[]>(nullable: true),
                     IsPublic = table.Column<bool>(nullable: false),
                     IsFeatured = table.Column<bool>(nullable: false),
                     UploadDate = table.Column<DateTime>(nullable: false),

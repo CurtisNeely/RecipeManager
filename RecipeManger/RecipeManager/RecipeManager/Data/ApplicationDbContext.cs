@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RecipeManager.Models;
+using RecipeManager.ViewModels;
 
 namespace RecipeManager.Data
 {
