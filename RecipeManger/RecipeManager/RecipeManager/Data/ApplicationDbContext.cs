@@ -13,6 +13,14 @@ namespace RecipeManager.Data
             : base(options)
         {
         }
-        // Dbsets for additional tables/entities
-    }
+
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Favourite> Favourites { get; set; }
+        public DbSet<Ingredient> Ingredients { get; set; }
+        public DbSet<Rating> Ratings {get; set;}
+        public DbSet<Recipe> Recipes {get; set;}
+        public DbSet<RecipeCategory> RecipeCategories{get; set;}
+        public DbSet<Step> Steps {get; set;}
+
+}
 }
