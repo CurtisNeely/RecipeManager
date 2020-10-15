@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -55,14 +56,23 @@ namespace RecipeManager.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Name,Time,Servings,Description,IsPublic,Photo")] Recipe recipe, IFormFile Image)
+        public async Task<IActionResult> Create([Bind("Name,Time,Servings,Description,IsPublic,Photo")] Recipe recipe, IFormFile Image)
         //public IActionResult Create(IFormFile Image)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && Image != null)
             {
-                //_context.Add(recipe);
-                //await _context.SaveChangesAsync();
-                //return RedirectToAction(nameof(Index));
+                byte[] p1 = null;
+                using (var fs1 = Image.OpenReadStream())
+                using (var ms1 = new MemoryStream())
+                {
+                    fs1.CopyTo(ms1);
+                    p1 = ms1.ToArray();
+                }
+                recipe.Photo = p1;
+
+                _context.Add(recipe);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
                 //return View(Recipe);
                 return RedirectToAction("Index", "Recipes");
             }

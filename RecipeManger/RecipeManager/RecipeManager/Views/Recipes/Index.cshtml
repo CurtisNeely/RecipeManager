@@ -31,9 +31,6 @@
                 @Html.DisplayNameFor(model => model.IsPublic)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsFeatured)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.UploadDate)
             </th>
             <th>
@@ -58,13 +55,10 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Photo)
+                <img class="card-img-top m-2" src="data:image/jpeg;base64,@Convert.ToBase64String(item.Photo)" style="width: 200px; height: 200px; object-fit: cover; border-radius: 50%; cursor: pointer;" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsPublic)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsFeatured)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.UploadDate)
