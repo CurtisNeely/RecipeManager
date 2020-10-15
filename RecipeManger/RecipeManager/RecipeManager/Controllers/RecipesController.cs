@@ -56,26 +56,24 @@ namespace RecipeManager.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Time,Servings,Description,IsPublic,Photo")] Recipe recipe, IFormFile Image)
-        //public IActionResult Create(IFormFile Image)
+        public IActionResult Create(IFormFile Photo, String Name, String Time, String Servings, String Description, bool IsPublic)
         {
-            if (ModelState.IsValid && Image != null)
-            {
-                byte[] p1 = null;
-                using (var fs1 = Image.OpenReadStream())
-                using (var ms1 = new MemoryStream())
-                {
-                    fs1.CopyTo(ms1);
-                    p1 = ms1.ToArray();
-                }
-                recipe.Photo = p1;
 
-                _context.Add(recipe);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-                //return View(Recipe);
-                return RedirectToAction("Index", "Recipes");
-            }
+            //if (ModelState.IsValid && Image != null)
+           // {
+               // byte[] p1 = null;
+                //using (var fs1 = Image.OpenReadStream())
+                //using (var ms1 = new MemoryStream())
+                //{
+                //    fs1.CopyTo(ms1);
+                //    p1 = ms1.ToArray();
+               // }
+               // recipe.Photo = p1;
+
+                //_context.Add(recipe);
+               // await _context.SaveChangesAsync();
+               // return RedirectToAction("Index", "Recipes");
+           // }
             return RedirectToAction("Index", "Recipes");
         }
 

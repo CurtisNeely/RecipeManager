@@ -19,6 +19,7 @@ namespace RecipeManager.Models
         [Required]
         public string Servings { get; set; }
         [Required]
+        [Display(Name ="Short Description")]
         public string Description { get; set; }
 
         public byte[] Photo { get; set; }

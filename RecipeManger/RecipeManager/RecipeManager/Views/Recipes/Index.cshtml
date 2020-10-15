@@ -4,16 +4,14 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>My Recipes</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<input type="button" class="btn btn-primary m-2" value="Upload a New Recipe" onclick="location.href='@Url.Action("Create", "Recipes")'" >
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Time)
@@ -25,16 +23,7 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Photo)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.IsPublic)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UploadDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserId)
             </th>
             <th></th>
         </tr>
@@ -43,7 +32,8 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                <img class="card-img-top m-2 d-block" src="data:image/jpeg;base64,@Convert.ToBase64String(item.Photo)" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; cursor: pointer;" />
+                <h5 class="card-title text-center">@Html.DisplayFor(modelItem => item.Name)</h5>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Time)
@@ -55,21 +45,11 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                <img class="card-img-top m-2" src="data:image/jpeg;base64,@Convert.ToBase64String(item.Photo)" style="width: 200px; height: 200px; object-fit: cover; border-radius: 50%; cursor: pointer;" />
+                @item.IsPublic.ToString()
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IsPublic)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UploadDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <input type="button" class="btn btn-success m-1" value="Edit" onclick="location.href='@Url.Action("Edit", "Recipes", new { id=item.Id})'">
+                <input type="button" class="btn btn-danger m-1" value="Delete" onclick="location.href='@Url.Action("Delete", "Recipes", new { id=item.Id})'">
             </td>
         </tr>
 }

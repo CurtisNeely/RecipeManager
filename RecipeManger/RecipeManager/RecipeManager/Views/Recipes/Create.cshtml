@@ -4,57 +4,71 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Upload a Recipe</h1>
 
-
-<h4>Recipe</h4>
 <hr />
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-6">
         <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
+                <label asp-for="Photo" class="control-label"></label>
+                <input name="Photo" class="form-control" type="file" onchange="readURL(this);"/>
+                <span asp-validation-for="Photo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" value="Fruitloops"/>
+                <input name="Name" class="form-control" value="Fruitloops" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Time" class="control-label"></label>
-                <input asp-for="Time" class="form-control" value="3 hours"/>
+                <input name="Time" class="form-control" value="3 hours" />
                 <span asp-validation-for="Time" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Servings" class="control-label"></label>
-                <input asp-for="Servings" class="form-control" value="2 Humans"/>
+                <input name="Servings" class="form-control" value="2 Humans" />
                 <span asp-validation-for="Servings" class="text-danger"> </span>
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" value="A colourful treat to soothe a wairy traveller"></input>
-                <!--<textarea asp-for="Description" class="form-control"></textarea>-->
+                <input name="Description" class="form-control" value="A colourful treat to soothe a wairy traveller"></input>
                 <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Photo" class="control-label"></label>
-                <input type="file" name="Image" class="form-control" />
-                <span asp-validation-for="Photo" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsPublic" /> Let anyone see this recipe?
+                    <input name="IsPublic" class="form-check-input" asp-for="IsPublic" /> Let anyone see this recipe?
                 </label>
             </div>
             <div class="form-group">
+                <input type="button" value="Cancel" class="btn btn-warning" onclick="location.href='@Url.Action("Index", "Recipes")'" />
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
+    <div class="col-md-6">
+            <img id="blah" class="mx-auto d-block border border-primary" src="" style="width: 300px; height: 300px; object-fit: cover; border-radius: 50%;"  />
+    </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+        @section Scripts {
+            @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        }
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#blah')
+                    .attr('src', e.target.result)
+                    .width(300)
+                    .height(300);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
