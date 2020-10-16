@@ -16,5 +16,11 @@ namespace RecipeManager.Models
 
         [ForeignKey("Recipe")]
         public long RecipeId { get; set; }
+
+        public Ingredient(string measurement, string name)
+        {
+            Measurement = measurement;
+            Name = name;
+        }
     }
 }

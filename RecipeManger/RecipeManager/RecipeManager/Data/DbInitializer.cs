@@ -12,6 +12,38 @@ namespace RecipeManager.Data
 {
     public static class DbInitializer
     {
+        //public static async Task<int> SeedCategories(IServiceProvider serviceProvider)
+        //{
+        //    var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
+
+        //    if (!context.Categories.Any())
+        //    {
+        //        var categories = new List<Category>();
+
+        //        categories.Add(new Category("breakfast", "meal"));
+        //        categories.Add(new Category("lunch", "meal"));
+        //        categories.Add(new Category("dinner", "meal"));
+
+        //        categories.Add(new Category("brunch", "meal"));
+        //        categories.Add(new Category("snack", "meal"));
+        //        categories.Add(new Category("beverage", "drink"));
+
+        //        categories.Add(new Category("low sugar", "diet"));
+        //        categories.Add(new Category("keto", "diet"));
+        //        categories.Add(new Category("paleo", "diet"));
+
+        //        categories.Add(new Category("vegan", "diet"));
+        //        categories.Add(new Category("vegitarian", "diet"));
+        //        categories.Add(new Category("dairy free", "diet"));
+
+        //        context.AddRange(categories);
+        //        await context.SaveChangesAsync();
+
+        //        return 1;
+        //    }
+        //    return 0;
+        //}
+
         public static async Task<int> SeedUsersAndRoles(IServiceProvider serviceProvider)
         {
             // create the database if it doesn't exist

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RecipeManager.Data;
 
 namespace RecipeManager.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201016041242_updatedRecipeModelUploadDate")]
+    partial class updatedRecipeModelUploadDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -230,10 +232,13 @@ namespace RecipeManager.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("CategoryType")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("RecipeId")
+                    b.Property<long?>("RecipeId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
@@ -348,6 +353,24 @@ namespace RecipeManager.Migrations
                     b.ToTable("Recipes");
                 });
 
+            modelBuilder.Entity("RecipeManager.Models.RecipeCategory", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long>("CategoryId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("RecipeId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RecipeCategories");
+                });
+
             modelBuilder.Entity("RecipeManager.Models.Step", b =>
                 {
                     b.Property<long>("Id")
@@ -426,9 +449,7 @@ namespace RecipeManager.Migrations
                 {
                     b.HasOne("RecipeManager.Models.Recipe", null)
                         .WithMany("categories")
-                        .HasForeignKey("RecipeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RecipeId");
                 });
 
             modelBuilder.Entity("RecipeManager.Models.Ingredient", b =>

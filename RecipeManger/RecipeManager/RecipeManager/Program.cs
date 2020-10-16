@@ -17,8 +17,12 @@ namespace RecipeManager
         {
             var host = CreateHostBuilder(args).Build();
 
-            using (var scope = host.Services.CreateScope())
+            using (var scope = host.Services.CreateScope()) {
                 DbInitializer.SeedUsersAndRoles(scope.ServiceProvider).Wait();
+                //DbInitializer.SeedCategories(scope.ServiceProvider).Wait();
+            }
+
+            
 
             host.Run();
         }

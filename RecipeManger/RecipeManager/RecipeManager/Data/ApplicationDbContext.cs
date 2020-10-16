@@ -4,7 +4,6 @@ using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RecipeManager.Models;
-using RecipeManager.ViewModels;
 
 namespace RecipeManager.Data
 {
@@ -20,8 +19,7 @@ namespace RecipeManager.Data
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<Rating> Ratings {get; set;}
         public DbSet<Recipe> Recipes {get; set;}
-        public DbSet<RecipeCategory> RecipeCategories{get; set;}
         public DbSet<Step> Steps {get; set;}
 
-}
+    }
 }

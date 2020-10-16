@@ -28,10 +28,15 @@ namespace RecipeManager.Models
 
         public bool IsFeatured { get; set; }
 
+        [DataType(DataType.Date)]
         public DateTime UploadDate { get; set; }
 
         [ForeignKey("ApplicationUser")]
         public string UserId { get; set; }
+
+        public List<Ingredient> Ingredients { get; set; }
+        public List<Step> Steps { get; set; }
+        public List<Category> Categories { get; set; }
     }
 }
 

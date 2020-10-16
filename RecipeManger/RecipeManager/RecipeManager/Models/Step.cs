@@ -16,5 +16,11 @@ namespace RecipeManager.Models
 
         [ForeignKey("Recipe")]
         public long RecipeId { get; set; }
+
+        public Step(int stepNumber, string description)
+        {
+            StepNumber = stepNumber;
+            Description = description;
+        }
     }
 }
