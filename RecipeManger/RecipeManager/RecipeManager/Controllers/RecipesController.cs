@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -126,10 +127,15 @@ namespace RecipeManager.Controllers
             }
 
             var recipe = await _context.Recipes.FindAsync(id);
+            recipe.Ingredients = await _context.Ingredients.Where(i => i.RecipeId == recipe.Id).ToListAsync();
+            recipe.Steps = await _context.Steps.Where(s => s.RecipeId == recipe.Id).ToListAsync();
+            recipe.Categories = await _context.Categories.Where(c => c.RecipeId == recipe.Id).ToListAsync();
+
             if (recipe == null)
             {
                 return NotFound();
             }
+
             return View(recipe);
         }
 
