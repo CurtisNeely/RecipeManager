@@ -7,13 +7,14 @@
 <h1>Upload a Recipe</h1>
 
 <hr />
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="Create" enctype="multipart/form-data">
+<form asp-action="Create" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-8">
+            <h3>The Details</h3>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Photo" class="control-label"></label>
-                <input name="Photo" class="form-control" type="file" onchange="readURL(this);"/>
+                <input name="Photo" class="form-control" type="file" onchange="readURL(this);" />
                 <span asp-validation-for="Photo" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -38,19 +39,83 @@
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input name="IsPublic" class="form-check-input" asp-for="IsPublic" /> Let anyone see this recipe?
+                    <input type="checkbox" name="IsPublic" class="form-check-input" asp-for="IsPublic" /> Let anyone see this recipe?
                 </label>
             </div>
-            <div class="form-group">
-                <input type="button" value="Cancel" class="btn btn-warning" onclick="location.href='@Url.Action("Index", "Recipes")'" />
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-    <div class="col-md-6">
-            <img id="blah" class="mx-auto d-block border border-primary" src="" style="width: 300px; height: 300px; object-fit: cover; border-radius: 50%;"  />
-    </div>
-</div>
+
+        </div>
+        <div class="col-md-4">
+            <img id="blah" class="mx-auto d-block border border-primary" src="" style="width: 300px; height: 300px; object-fit: cover; border-radius: 50%;" />
+        </div>
+        </div>
+    
+        <h3 class="mt-5">The Ingredients</h3>
+        <button type="button" class="btn btn-success m-1" onclick="addAnotherIngredient()">Add another Ingredient</button>
+        <table class="table table-bordered" id="ingredientTable">
+            <tr>
+                <th>Amount</th>
+                <th>Name</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td><input class="form-control" name="IngredientAmount" /></td>
+                <td><input class="form-control" name="IngredientName" /></td>
+                <td><button type="button" class="btn btn-danger form-control" onclick="deleteIngredientRow(this)">Delete</button></td>
+            </tr>
+        </table>
+
+        <h3 class="mt-5">The Steps</h3>
+        <button type="button" class="btn btn-success m-1" onclick="addAnotherStep()">Add another Step</button>
+        <table class="table table-bordered" id="stepTable">
+            <tr>
+                <th>Step #</th>
+                <th>Description</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td><h5 class="text-center">1</h5></td>
+                <td><input class="form-control" name="StepDescription" /></td>
+                <td><button type="button" class="btn btn-danger form-control" onclick="deleteStepRow(this)">Delete</button></td>
+            </tr>
+        </table>
+
+        <h3 class="mt-5">The Categories</h3>
+        <table class="table table-bordered">
+            <tr>
+                <th colspan="3">Check all that apply</th>
+            </tr>
+            <tr>
+                <td><input type="checkbox" name="Categories" value="Breakfast" /> Breakfast</td>
+                <td><input type="checkbox" name="Categories" value="Lunch" /> Lunch</td>
+                <td><input type="checkbox" name="Categories" value="Dinner" /> Dinner</td>
+            </tr>
+            <tr>
+                <td><input type="checkbox" name="Categories" value="Brunch" /> Brunch</td>
+                <td><input type="checkbox" name="Categories" value="Snack" /> Snack</td>
+                <td><input type="checkbox" name="Categories" value="Beverage" /> Beverage</td>
+            </tr>
+            <tr>
+                <td><input type="checkbox" name="Categories" value="Low Sugar" /> Low Sugar</td>
+                <td><input type="checkbox" name="Categories" value="Keto" /> Keto</td>
+                <td><input type="checkbox" name="Categories" value="Paleo" /> Paleo</td>
+            </tr>
+            <tr>
+                <td><input type="checkbox" name="Categories" value="Vegan" /> Vegan</td>
+                <td><input type="checkbox" name="Categories" value="Vegetarian" /> Vegitarian</td>
+                <td><input type="checkbox" name="Categories" value="Dairy Free" /> Dairy Free</td>
+            </tr>
+            <tr>
+                <td><input type="checkbox" name="Categories" value="Gluton Free" /> Gluton Free</td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+
+        <div class="form-group">
+            <input type="button" value="Cancel" class="btn btn-warning" onclick="location.href='@Url.Action("Index", "Recipes")'" />
+            <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
+</form>
 
         @section Scripts {
             @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
@@ -69,6 +134,58 @@
             };
 
             reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function addAnotherIngredient() {
+        let table = document.getElementById("ingredientTable");
+
+        let row = table.insertRow(-1);
+        let cell1 = row.insertCell(0);
+        let cell2 = row.insertCell(1);
+        let cell3 = row.insertCell(2);
+
+        cell1.innerHTML = "<input class='form-control' name='ingredientAmount'/>";
+        cell2.innerHTML = "<input class='form-control' name='ingredientName' />";
+        cell3.innerHTML = "<button type='button' class='btn btn-danger form-control' onclick='deleteIngredientRow(this)'>Delete</button>";
+    }
+
+    function addAnotherStep() {
+        let table = document.getElementById("stepTable");
+
+        stepNumber = parseInt(table.rows.length -1) + 1;
+
+        let row = table.insertRow(-1);
+        let cell1 = row.insertCell(0);
+        let cell2 = row.insertCell(1);
+        let cell3 = row.insertCell(2);
+
+        cell1.innerHTML = "<h5 class='text-center'>" + stepNumber + "</h5>";
+        cell2.innerHTML = "<input class='form-control' name='stepDescription' />";
+        cell3.innerHTML = "<button type='button' class='btn btn-danger form-control' onclick='deleteStepRow(this)'>Delete</button>";
+    }
+
+    function deleteIngredientRow(input) {
+        let table = document.getElementById("ingredientTable");
+        $(input).parents('tr').remove();
+
+        if (table.rows.length == 1) {
+            addAnotherIngredient();
+        }
+    }
+
+    function deleteStepRow(input) {
+        let table = document.getElementById("stepTable");
+        console.log("HELLO ALIENS!");
+        $(input).parents('tr').remove()
+
+        for (let x = 1; x < table.rows.length; x++) {
+            table.rows[x].cells[0].innerHTML = "<h5 class='text-center'>" + x + "</h5>";
+            console.log(x);
+        }
+
+        if (table.rows.length == 1) {
+            addAnotherStep();
         }
     }
 </script>

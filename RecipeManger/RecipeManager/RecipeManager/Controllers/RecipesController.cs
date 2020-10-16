@@ -56,7 +56,7 @@ namespace RecipeManager.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(IFormFile Photo, String Name, String Time, String Servings, String Description, bool IsPublic)
+        public IActionResult Create(IFormFile Photo, String Name, String Time, String Servings, String Description, bool IsPublic, String[] IngredientAmount, String[] IngredientName, String[] StepDescription, String[] Categories)
         {
 
             //if (ModelState.IsValid && Image != null)
