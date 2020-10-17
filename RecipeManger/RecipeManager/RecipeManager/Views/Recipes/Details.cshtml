@@ -4,69 +4,75 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>@Model.Name</h1>
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <table class="table table-bordered">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Time)</th>
+                <td>@Model.Time</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Servings)</th>
+                <td>@Model.Servings</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Description)</th>
+                <td>@Model.Description</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.IsPublic)</th>
+                <td>@Model.IsPublic</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.UploadDate)</th>
+                <td>@Model.UploadDate.ToString("dd/MM/yyyy")</td>
+            </tr>
+        </table>
 
-<div>
-    <h4>Recipe</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Time)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Time)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Servings)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Servings)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Photo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Photo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsPublic)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsPublic)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsFeatured)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsFeatured)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UploadDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UploadDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UserId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UserId)
-        </dd>
-    </dl>
+    </div>
+    <div class="col-md-4">
+        <img id="blah" class="mx-auto d-flex border border-dark" src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Photo)" style="width: 300px; height: 300px; object-fit: cover; border-radius: 50%;" />
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+<h3 class="mt-5">The Ingredients</h3>
+<table class="table table-bordered" id="ingredientTable">
+    <tr>
+        <th>Amount</th>
+        <th>Name</th>
+    </tr>
+    @foreach (var item in Model.Ingredients){
+    <tr>
+        <td>@item.Measurement</td>
+        <td>@item.Name</td>
+    </tr>
+    }
+</table>
+
+<h3 class="mt-5">The Steps</h3>
+<table class="table table-bordered" id="stepTable">
+    <tr>
+        <th>Step #</th>
+        <th>Description</th>
+    </tr>
+    @foreach (var item in Model.Steps.OrderBy(s => s.StepNumber))
+    {
+        <tr>
+            <td>@item.StepNumber</td>
+            <td>@item.Description</td>
+        </tr>
+    }
+</table>
+
+<h3 class="mt-5">The Categories</h3>
+<table class="table table-bordered">
+
+    @foreach (var item in Model.Categories)
+    {
+        <tr>
+            <td>@item.Name</td>
+        </tr>
+    }
+</table>

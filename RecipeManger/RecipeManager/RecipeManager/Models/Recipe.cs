@@ -15,6 +15,7 @@ namespace RecipeManager.Models
         [Required]
         public string Name { get; set; }
         [Required]
+        [Display(Name = "Make Time")]
         public string Time { get; set; }
         [Required]
         public string Servings { get; set; }
@@ -24,6 +25,7 @@ namespace RecipeManager.Models
         [Required]
         public byte[] Photo { get; set; }
         [Required]
+        [Display(Name = "Visible to anyone?")]
         public bool IsPublic { get; set; }
 
         public bool IsFeatured { get; set; }

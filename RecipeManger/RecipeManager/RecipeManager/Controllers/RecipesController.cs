@@ -42,6 +42,11 @@ namespace RecipeManager.Controllers
 
             var recipe = await _context.Recipes
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            recipe.Ingredients = await _context.Ingredients.Where(i => i.RecipeId == recipe.Id).ToListAsync();
+            recipe.Steps = await _context.Steps.Where(s => s.RecipeId == recipe.Id).ToListAsync();
+            recipe.Categories = await _context.Categories.Where(c => c.RecipeId == recipe.Id).ToListAsync();
+
             if (recipe == null)
             {
                 return NotFound();
@@ -135,7 +140,6 @@ namespace RecipeManager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(long id, Recipe recipe, IFormFile NewPhoto, String[] IngredientAmount, String[] IngredientName, String[] StepDescription, String[] Categories)
         {
-            //var oldRecipe = await _context.Recipes.FindAsync(id);
             var oldIngredients = await _context.Ingredients.Where(i => i.RecipeId == recipe.Id).ToListAsync();
             var oldSteps = await _context.Steps.Where(s => s.RecipeId == recipe.Id).ToListAsync();
             var oldCategories = await _context.Categories.Where(c => c.RecipeId == recipe.Id).ToListAsync();
