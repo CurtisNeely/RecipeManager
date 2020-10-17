@@ -144,8 +144,13 @@ namespace RecipeManager.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,Name,Time,Servings,Description,Photo,IsPublic,IsFeatured,UploadDate,UserId")] Recipe recipe)
+        public async Task<IActionResult> Edit(long id, Recipe recipe, IFormFile Photo, String[] IngredientAmount, String[] IngredientName, String[] StepDescription, String[] Categories)
         {
+            //var oldRecipe = await _context.Recipes.FindAsync(id);
+            var oldIngredients = await _context.Ingredients.Where(i => i.RecipeId == recipe.Id).ToListAsync();
+            var oldSteps = await _context.Steps.Where(s => s.RecipeId == recipe.Id).ToListAsync();
+            var oldCategories = await _context.Categories.Where(c => c.RecipeId == recipe.Id).ToListAsync();
+
             if (id != recipe.Id)
             {
                 return NotFound();
@@ -153,8 +158,47 @@ namespace RecipeManager.Controllers
 
             if (ModelState.IsValid)
             {
+                List<Ingredient> ingredients = new List<Ingredient>();
+                List<Step> steps = new List<Step>();
+                List<Category> categories = new List<Category>();
+
+                for (int x = 0; x < IngredientAmount.Length; x++)
+                {
+                    ingredients.Add(new Ingredient(IngredientAmount[x], IngredientName[x]));
+                }
+
+                for (int x = 0; x < StepDescription.Length; x++)
+                {
+                    steps.Add(new Step(x + 1, StepDescription[x]));
+                }
+
+                for (int x = 0; x < Categories.Length; x++)
+                {
+                    categories.Add(new Category() { Name = Categories[x] });
+                }
+
+                if(Photo != null)
+                {
+                    byte[] p1 = null;
+                    using (var fs1 = Photo.OpenReadStream())
+                    using (var ms1 = new MemoryStream())
+                    {
+                        fs1.CopyTo(ms1);
+                        p1 = ms1.ToArray();
+                    }
+
+                    recipe.Photo = p1;
+                }
+
+                recipe.Ingredients = ingredients;
+                recipe.Steps = steps;
+                recipe.Categories = categories;
+
                 try
                 {
+                    _context.RemoveRange(oldIngredients);
+                    _context.RemoveRange(oldSteps);
+                    _context.RemoveRange(oldCategories);
                     _context.Update(recipe);
                     await _context.SaveChangesAsync();
                 }
