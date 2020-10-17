@@ -24,4 +24,8 @@
     <Folder Include="ViewModels\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\images\recipeIcon.png" />
+  </ItemGroup>
+
 </Project>
