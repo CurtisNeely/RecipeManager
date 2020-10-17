@@ -61,20 +61,8 @@ namespace RecipeManager.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(IFormFile Photo, String Name, String Time, String Servings, String Description, bool IsPublic, String[] IngredientAmount, String[] IngredientName, String[] StepDescription, String[] Categories)
+        public async Task<IActionResult> Create(Recipe recipe, IFormFile Photo, String Name, String Time, String Servings, String Description, bool IsPublic, String[] IngredientAmount, String[] IngredientName, String[] StepDescription, String[] Categories)
         {
-
-            Recipe recipe = new Recipe()
-            {
-                Name = Name,
-                Time = Time,
-                Servings = Servings,
-                Description = Description,
-                IsPublic = IsPublic,
-                IsFeatured = false,
-                UploadDate = DateTime.UtcNow              
-            };
-
             if (ModelState.IsValid && Photo != null)
             {
                 List<Ingredient> ingredients = new List<Ingredient>();
@@ -109,6 +97,7 @@ namespace RecipeManager.Controllers
                 recipe.Steps = steps;
                 recipe.Categories = categories;
                 recipe.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                recipe.UploadDate = DateTime.UtcNow;
 
                 _context.Add(recipe);
                 await _context.SaveChangesAsync();
@@ -144,7 +133,7 @@ namespace RecipeManager.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, Recipe recipe, IFormFile Photo, String[] IngredientAmount, String[] IngredientName, String[] StepDescription, String[] Categories)
+        public async Task<IActionResult> Edit(long id, Recipe recipe, IFormFile NewPhoto, String[] IngredientAmount, String[] IngredientName, String[] StepDescription, String[] Categories)
         {
             //var oldRecipe = await _context.Recipes.FindAsync(id);
             var oldIngredients = await _context.Ingredients.Where(i => i.RecipeId == recipe.Id).ToListAsync();
@@ -177,10 +166,10 @@ namespace RecipeManager.Controllers
                     categories.Add(new Category() { Name = Categories[x] });
                 }
 
-                if(Photo != null)
+                if(NewPhoto != null)
                 {
                     byte[] p1 = null;
-                    using (var fs1 = Photo.OpenReadStream())
+                    using (var fs1 = NewPhoto.OpenReadStream())
                     using (var ms1 = new MemoryStream())
                     {
                         fs1.CopyTo(ms1);

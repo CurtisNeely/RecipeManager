@@ -21,7 +21,7 @@ namespace RecipeManager.Models
         [Required]
         [Display(Name ="Short Description")]
         public string Description { get; set; }
-
+        [Required]
         public byte[] Photo { get; set; }
         [Required]
         public bool IsPublic { get; set; }
