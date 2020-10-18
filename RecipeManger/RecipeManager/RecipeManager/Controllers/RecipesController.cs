@@ -29,7 +29,9 @@ namespace RecipeManager.Controllers
         // GET: Recipes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Recipes.ToListAsync());
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            return View(await _context.Recipes.Where(r => r.UserId == userId).ToListAsync());
         }
 
         // GET: Recipes/Details/5
@@ -308,7 +310,7 @@ namespace RecipeManager.Controllers
         public async Task<IActionResult> SearchByNameAndCategory(string SearchPhrase, string Category, int? pageNumber)
         {
 
-            if (Category != null && SearchPhrase != "Empty Search")
+            if (Category != null && SearchPhrase != null)
             {
                 ViewBag.SearchPhrase = SearchPhrase;
                 ViewBag.SearchCategory = Category;
