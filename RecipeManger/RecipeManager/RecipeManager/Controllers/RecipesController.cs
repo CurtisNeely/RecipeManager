@@ -401,6 +401,26 @@ namespace RecipeManager.Controllers
             return RedirectToAction(nameof(Details), new { Id = Id });
         }
 
+        public async Task<IActionResult> ReverseIsPublic(long Id)
+        {
+            var recipe = await _context.Recipes.FirstOrDefaultAsync(r => r.Id == Id);
+
+            if (recipe == null)
+            {
+                return NotFound();
+            }
+
+            if (recipe.IsPublic)
+                recipe.IsPublic = false;
+            else
+                recipe.IsPublic = true;
+
+            _context.Recipes.Update(recipe);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
             private bool RecipeExists(long id)
         {
             return _context.Recipes.Any(e => e.Id == id);
