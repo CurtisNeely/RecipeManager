@@ -33,6 +33,13 @@ namespace RecipeManager.Models
         [DataType(DataType.Date)]
         public DateTime UploadDate { get; set; }
 
+        [Required]
+        [Display(Name = "Average Rating")]
+        public double RatingAverage { get; set; }
+        [Required]
+        [Display(Name = "Rating Count")]
+        public int RatingCount { get; set; }
+
         [ForeignKey("ApplicationUser")]
         public string UserId { get; set; }
 

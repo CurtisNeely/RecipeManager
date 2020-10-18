@@ -68,7 +68,9 @@ namespace RecipeManager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Recipe recipe, IFormFile Photo, String Name, String Time, String Servings, String Description, bool IsPublic, String[] IngredientAmount, String[] IngredientName, String[] StepDescription, String[] Categories)
         {
-            if (ModelState.IsValid && Photo != null)
+
+            //if (ModelState.IsValid)
+            if(Photo != null && recipe.Name != null && recipe.Time != null && recipe.Servings != null && recipe.Description != null)
             {
                 List<Ingredient> ingredients = new List<Ingredient>();
                 List<Step> steps = new List<Step>();
@@ -103,6 +105,8 @@ namespace RecipeManager.Controllers
                 recipe.Categories = categories;
                 recipe.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 recipe.UploadDate = DateTime.UtcNow;
+                recipe.RatingAverage = 0;
+                recipe.RatingCount = 0;
 
                 _context.Add(recipe);
                 await _context.SaveChangesAsync();
