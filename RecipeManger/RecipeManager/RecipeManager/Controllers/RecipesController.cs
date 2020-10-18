@@ -245,7 +245,7 @@ namespace RecipeManager.Controllers
         }
 
         // GET: Recipes/Search/pizza
-        public async Task<IActionResult> SearchByName(string SearchPhrase)
+        public async Task<IActionResult> SearchByName(string SearchPhrase, int? pageNumber)
         {
             if(SearchPhrase == null)
             {
@@ -253,24 +253,27 @@ namespace RecipeManager.Controllers
             }
 
             ViewBag.SearchPhrase = SearchPhrase;
+            ViewBag.Action = "SearchByName";
+            int pageSize = 3;
 
-            var recipe = await _context.Recipes.Where(r => r.Name.ToLower().Contains(SearchPhrase.ToLower()) && r.IsPublic == true).ToListAsync();
+            var recipe = _context.Recipes.Where(r => r.Name.ToLower().Contains(SearchPhrase.ToLower()) && r.IsPublic == true).AsQueryable();
+            ViewBag.ResultCount = recipe.Count();
 
             if (recipe == null)
             {
                 return NotFound();
             }
 
-            return View("Search", recipe);
+            return View("Search", await PaginatedList<Recipe>.CreateAsync(recipe.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
-        public async Task<IActionResult> SearchByCategory(string Category)
+        public async Task<IActionResult> SearchByCategory(string Category, int? pageNumber)
         {
             ViewBag.SearchCategory = Category;
+            ViewBag.Action = "SearchByCategory";
+            int pageSize = 3;
 
-            //var recipe = await _context.Recipes.FromSqlInterpolated($"SELECT dbo.Recipes.* FROM dbo.Recipes JOIN dbo.Categories ON dbo.Recipes.Id = dbo.Categories.RecipeId WHERE dbo.Categories.Name = {Category} AND dbo.Recipes.IsPublic = 'TRUE'").ToListAsync();
-
-            var recipe = await _context.Recipes
+            var recipe = _context.Recipes
                     .Join(
                         _context.Categories,
                         recipe => recipe.Id,
@@ -289,34 +292,38 @@ namespace RecipeManager.Controllers
                         IsFeatured = x.recipe.IsFeatured,
                         UploadDate = x.recipe.UploadDate
                     }
-                    ).ToListAsync();
+                    ).AsQueryable();
+
+            ViewBag.ResultCount = recipe.Count();
 
             if (recipe == null)
             {
                 return NotFound();
             }
 
-            return View("Search", recipe);
+            return View("Search", await PaginatedList<Recipe>.CreateAsync(recipe.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
 
-        public async Task<IActionResult> SearchByNameAndCategory(string Name, string Category)
+        public async Task<IActionResult> SearchByNameAndCategory(string SearchPhrase, string Category, int? pageNumber)
         {
 
-            if (Category != null && Name != "Empty Search")
+            if (Category != null && SearchPhrase != "Empty Search")
             {
-                ViewBag.SearchPhrase = Name;
+                ViewBag.SearchPhrase = SearchPhrase;
                 ViewBag.SearchCategory = Category;
+                ViewBag.Action = "SearchByNameAndCategory";
+                int pageSize = 3;
 
                 //var recipe = await _context.Recipes.FromSqlInterpolated($"SELECT r.* FROM dbo.Recipes r JOIN dbo.Categories c ON r.Id = c.RecipeId WHERE r.Name = '{word}'").ToListAsync();
 
-                var recipe = await _context.Recipes
+                var recipe = _context.Recipes
                     .Join(
                         _context.Categories,
                         recipe => recipe.Id,
                         category => category.RecipeId,
                         (recipe, category) => new {recipe, category})
-                    .Where(x => x.category.Name == Category && x.recipe.Name.Contains(Name) && x.recipe.IsPublic == true)
+                    .Where(x => x.category.Name == Category && x.recipe.Name.ToLower().Contains(SearchPhrase.ToLower()) && x.recipe.IsPublic == true)
                     .Select(x => new Recipe
                         {
                             Id = x.recipe.Id,
@@ -329,14 +336,16 @@ namespace RecipeManager.Controllers
                             IsFeatured = x.recipe.IsFeatured,
                             UploadDate = x.recipe.UploadDate
                         }
-                    ).ToListAsync();
+                    ).AsQueryable();
+
+                ViewBag.ResultCount = recipe.Count();
 
                 if (recipe == null)
                 {
                     return NotFound();
                 }
 
-                return View("Search", recipe);
+                return View("Search", await PaginatedList<Recipe>.CreateAsync(recipe.AsNoTracking(), pageNumber ?? 1, pageSize));
 
             }
             else

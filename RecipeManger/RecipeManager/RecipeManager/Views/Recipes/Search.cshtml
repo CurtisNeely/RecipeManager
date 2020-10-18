@@ -1,20 +1,20 @@
-﻿@model IEnumerable<RecipeManager.Models.Recipe>
+﻿@model PaginatedList<RecipeManager.Models.Recipe>
 
 @{
     ViewData["Title"] = "SearchByName";
 }
 
-@if (ViewBag.SearchPhrase != null && ViewBag.SearchCategory == null) 
-{ 
-    <h1>@Model.Count() Results for @ViewBag.SearchPhrase</h1>
+@if (ViewBag.SearchPhrase != null && ViewBag.SearchCategory == null)
+{
+    <h1>@ViewBag.ResultCount Results for @ViewBag.SearchPhrase</h1>
 }
 else if(ViewBag.SearchCategory != null && ViewBag.SearchPhrase == null) 
 { 
-    <h1>@Model.Count() Results for @ViewBag.SearchCategory</h1>
+<h1>@ViewBag.ResultCount Results for @ViewBag.SearchCategory</h1>
 }
 else
 {
-<h1>@Model.Count() Results for @ViewBag.SearchPhrase + @ViewBag.SearchCategory</h1>
+<h1>@ViewBag.ResultCount Results for @ViewBag.SearchPhrase + @ViewBag.SearchCategory</h1>
 }
 
 
@@ -22,7 +22,7 @@ else
     <div class="col-md-3 col-lg-2 border">
         <h3>Filters</h3>
         <form  asp-controller="Recipes" asp-action="SearchByNameAndCategory">
-            <input type="hidden" name="Name" value="@ViewBag.SearchPhrase" />
+            <input type="hidden" name="SearchPhrase" value="@ViewBag.SearchPhrase" />
             <div class="form-check">
                 <input class="form-check-input" type="radio" name="category" value="breakfast" checked>
                 <label class="form-check-label">
@@ -111,16 +111,16 @@ else
                     <th>
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Time)
+                        Time
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Servings)
+                        Servings
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Description)
+                        Description
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.IsPublic)
+                        Visible to Anyone?
                     </th>
                 </tr>
             </thead>
@@ -148,5 +148,58 @@ else
                 }
             </tbody>
         </table>
+
+        @{
+            var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+            var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+        }
+
+        @if (ViewBag.Action == "SearchByName")
+        {
+            <a asp-action="@ViewBag.Action"
+               asp-route-SearchPhrase="@ViewBag.SearchPhrase"
+               asp-route-pageNumber="@(Model.PageIndex - 1)"
+               class="btn btn-outline-secondary @prevDisabled">
+                Previous
+            </a>
+            <a asp-action="@ViewBag.Action"
+               asp-route-SearchPhrase="@ViewBag.SearchPhrase"
+               asp-route-pageNumber="@(Model.PageIndex + 1)"
+               class="btn btn-outline-secondary @nextDisabled">
+                Next
+            </a>
+        }
+        else if (ViewBag.Action == "SearchByCategory")
+        {
+            <a asp-action="@ViewBag.Action"
+               asp-route-Category="@ViewBag.SearchCategory"
+               asp-route-pageNumber="@(Model.PageIndex - 1)"
+               class="btn btn-outline-secondary @prevDisabled">
+                Previous
+            </a>
+            <a asp-action="@ViewBag.Action"
+               asp-route-Category="@ViewBag.SearchCategory"
+               asp-route-pageNumber="@(Model.PageIndex + 1)"
+               class="btn btn-outline-secondary @nextDisabled">
+                Next
+            </a>
+        }
+        else if(ViewBag.Action == "SearchByNameAndCategory")
+        {
+            <a asp-action="@ViewBag.Action"
+               asp-route-SearchPhrase="@ViewBag.SearchPhrase"
+               asp-route-Category="@ViewBag.SearchCategory"
+               asp-route-pageNumber="@(Model.PageIndex - 1)"
+               class="btn btn-outline-secondary @prevDisabled">
+                Previous
+            </a>
+            <a asp-action="@ViewBag.Action"
+               asp-route-SearchPhrase="@ViewBag.SearchPhrase"
+               asp-route-Category="@ViewBag.SearchCategory"
+               asp-route-pageNumber="@(Model.PageIndex + 1)"
+               class="btn btn-outline-secondary @nextDisabled">
+                Next
+            </a>
+        }
     </div>
 </div>

@@ -131,7 +131,7 @@
             <td><input type="checkbox" name="Categories" value="beverage" @(Convert.ToBoolean(Model.Categories.Any(x => x.Name.Equals("beverage"))) == true ? "checked = 'checked'" : string.Empty)/> Beverage</td>
         </tr>
         <tr>
-            <td><input type="checkbox" name="Categories" value="low Sugar" @(Convert.ToBoolean(Model.Categories.Any(x => x.Name.Equals("low sugar"))) == true ? "checked = 'checked'" : string.Empty)/> Low Sugar</td>
+            <td><input type="checkbox" name="Categories" value="low sugar" @(Convert.ToBoolean(Model.Categories.Any(x => x.Name.Equals("low sugar"))) == true ? "checked = 'checked'" : string.Empty)/> Low Sugar</td>
             <td><input type="checkbox" name="Categories" value="keto" @(Convert.ToBoolean(Model.Categories.Any(x => x.Name.Equals("keto"))) == true ? "checked = 'checked'" : string.Empty)/> Keto</td>
             <td><input type="checkbox" name="Categories" value="paleo" @(Convert.ToBoolean(Model.Categories.Any(x => x.Name.Equals("paleo"))) == true ? "checked = 'checked'" : string.Empty)/> Paleo</td>
         </tr>
