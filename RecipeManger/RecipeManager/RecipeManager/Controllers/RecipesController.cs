@@ -355,7 +355,51 @@ namespace RecipeManager.Controllers
 
         }
 
-        private bool RecipeExists(long id)
+        public async Task<IActionResult> Rate(long Id, int stars)
+        {
+            if (stars > 5)
+                stars = 5;
+            else if(stars < 1)
+                stars = 1;
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            Rating rating = new Rating() { RecipeId = Id, Stars = stars, UserId = userId };
+
+            var exists = await _context.Ratings.FirstOrDefaultAsync(r => r.RecipeId == rating.RecipeId && r.UserId == rating.UserId);
+
+            if(exists == null)
+            {
+                _context.Ratings.Add(rating);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                exists.Stars = rating.Stars;
+                _context.Ratings.Update(exists);
+                await _context.SaveChangesAsync();
+            }
+
+            var ratingCount = _context.Ratings.Count(r => r.RecipeId == rating.RecipeId && r.UserId == rating.UserId);
+            var ratingAverage = _context.Ratings.Average(r => r.Stars);
+
+            var recipe = await _context.Recipes.FirstOrDefaultAsync(r => r.Id == Id);
+
+            if (recipe == null)
+            {
+                return NotFound();
+            }
+
+            recipe.RatingCount = ratingCount;
+            recipe.RatingAverage = ratingAverage;
+
+            _context.Recipes.Update(recipe);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Details), new { Id = Id });
+        }
+
+            private bool RecipeExists(long id)
         {
             return _context.Recipes.Any(e => e.Id == id);
         }
