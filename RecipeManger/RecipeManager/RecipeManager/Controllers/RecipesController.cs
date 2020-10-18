@@ -240,6 +240,108 @@ namespace RecipeManager.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // GET: Recipes/Search/pizza
+        public async Task<IActionResult> SearchByName(string SearchPhrase)
+        {
+            if(SearchPhrase == null)
+            {
+                return RedirectToAction("Index","Home");
+            }
+
+            ViewBag.SearchPhrase = SearchPhrase;
+
+            var recipe = await _context.Recipes.Where(r => r.Name.ToLower().Contains(SearchPhrase.ToLower()) && r.IsPublic == true).ToListAsync();
+
+            if (recipe == null)
+            {
+                return NotFound();
+            }
+
+            return View("Search", recipe);
+        }
+
+        public async Task<IActionResult> SearchByCategory(string Category)
+        {
+            ViewBag.SearchCategory = Category;
+
+            //var recipe = await _context.Recipes.FromSqlInterpolated($"SELECT dbo.Recipes.* FROM dbo.Recipes JOIN dbo.Categories ON dbo.Recipes.Id = dbo.Categories.RecipeId WHERE dbo.Categories.Name = {Category} AND dbo.Recipes.IsPublic = 'TRUE'").ToListAsync();
+
+            var recipe = await _context.Recipes
+                    .Join(
+                        _context.Categories,
+                        recipe => recipe.Id,
+                        category => category.RecipeId,
+                        (recipe, category) => new { recipe, category })
+                    .Where(x => x.category.Name == Category && x.recipe.IsPublic == true)
+                    .Select(x => new Recipe
+                    {
+                        Id = x.recipe.Id,
+                        Name = x.recipe.Name,
+                        Time = x.recipe.Time,
+                        Servings = x.recipe.Servings,
+                        Description = x.recipe.Description,
+                        Photo = x.recipe.Photo,
+                        IsPublic = x.recipe.IsPublic,
+                        IsFeatured = x.recipe.IsFeatured,
+                        UploadDate = x.recipe.UploadDate
+                    }
+                    ).ToListAsync();
+
+            if (recipe == null)
+            {
+                return NotFound();
+            }
+
+            return View("Search", recipe);
+        }
+
+
+        public async Task<IActionResult> SearchByNameAndCategory(string Name, string Category)
+        {
+
+            if (Category != null && Name != "Empty Search")
+            {
+                ViewBag.SearchPhrase = Name;
+                ViewBag.SearchCategory = Category;
+
+                //var recipe = await _context.Recipes.FromSqlInterpolated($"SELECT r.* FROM dbo.Recipes r JOIN dbo.Categories c ON r.Id = c.RecipeId WHERE r.Name = '{word}'").ToListAsync();
+
+                var recipe = await _context.Recipes
+                    .Join(
+                        _context.Categories,
+                        recipe => recipe.Id,
+                        category => category.RecipeId,
+                        (recipe, category) => new {recipe, category})
+                    .Where(x => x.category.Name == Category && x.recipe.Name.Contains(Name) && x.recipe.IsPublic == true)
+                    .Select(x => new Recipe
+                        {
+                            Id = x.recipe.Id,
+                            Name = x.recipe.Name,
+                            Time = x.recipe.Time,
+                            Servings = x.recipe.Servings,
+                            Description = x.recipe.Description,
+                            Photo = x.recipe.Photo,
+                            IsPublic = x.recipe.IsPublic,
+                            IsFeatured = x.recipe.IsFeatured,
+                            UploadDate = x.recipe.UploadDate
+                        }
+                    ).ToListAsync();
+
+                if (recipe == null)
+                {
+                    return NotFound();
+                }
+
+                return View("Search", recipe);
+
+            }
+            else
+            {
+                return RedirectToAction(nameof(SearchByCategory), new { Category = Category });
+            }
+
+        }
+
         private bool RecipeExists(long id)
         {
             return _context.Recipes.Any(e => e.Id == id);

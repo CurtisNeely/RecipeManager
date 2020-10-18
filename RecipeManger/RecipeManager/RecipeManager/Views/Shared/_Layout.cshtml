@@ -17,24 +17,38 @@
                 </button>
                 <div class="navbar-collapse collapse d-inline-block m-auto">
                     <ul class="navbar-nav w-100">
-                        <li>
+                        <li class="nav-item m-auto">
                             <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/images/recipeIcon.png" class="navbar-toggler-icon" /></a>
                         </li>
                         <li class="nav-item m-auto">
-                            <form class="form-inline nav-item">
-                                <div class="dropdown">
+                            <form asp-controller="Recipes" asp-action="SearchByName" class="form-inline nav-item">
+                                <div class="dropdown  mr-1">
                                     <button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown">
                                         Categories
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li><a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Breakfast</a></li>
-                                        <li><a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Lunch</a></li>
-                                        <li><a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Dinner</a></li>
+                                        <li><a class="nav-link text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "breakfast"})'>Breakfast</a></li>
+                                        <li><a class="nav-link text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "lunch"})'>Lunch</a></li>
+                                        <li><a class="nav-link text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "dinner"})'>Dinner</a></li>
+
+                                        <li><a class="nav-link text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "brunch"})'>Brunch</a></li>
+                                        <li><a class="nav-link text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "snack"})'>Snack</a></li>
+                                        <li><a class="nav-link text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "beverage"})'>Beverages</a></li>
+
+                                        <li><a class="nav-link text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "low sugar"})'>Low Sugar</a></li>
+                                        <li><a class="nav-link text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "keto"})'>Keto</a></li>
+                                        <li><a class="nav-link text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "paleo"})'>Paleo</a></li>
+
+                                        <li><a class="nav-link text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "vegan"})'>Vegan</a></li>
+                                        <li><a class="nav-link text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "vegetarian"})'>Vegetarian</a></li>
+                                        <li><a class="nav-link text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "dairy free"})'>Dairy Free</a></li>
+
+                                        <li><a class="nav-link text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "gluton free"})'>Gluton Free</a></li>
                                     </ul>
                                 </div>
-                                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                                <input class="form-control mr-sm-1" type="search" name="SearchPhrase" placeholder="Search" aria-label="Search">
+                                <button class="btn btn-outline-success my-1 my-sm-0" type="submit">Search</button>
                             </form>
                         </li>
                         <partial name="_LoginPartial" />
