@@ -24,7 +24,7 @@ namespace RecipeManager.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var recipes = await _context.Recipes.Where(r => r.IsFeatured == true).ToListAsync();
+            var recipes = await _context.Recipes.Where(r => r.IsFeatured == true).Take(6).ToListAsync();
 
             return View(recipes);
         }
