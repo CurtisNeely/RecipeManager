@@ -56,7 +56,7 @@
                 {
                     <input type="button" class="btn btn-outline-secondary m-1" value="Make Public" onclick="location.href='@Url.Action("ReverseIsPublic", "Recipes", new { id=item.Id})'"><br />
                 }
-                <input type="button" class="btn btn-outline-success m-1" value="Edit" onclick="location.href='@Url.Action("Edit", "Recipes", new { id=item.Id})'"><br />
+                <input type="button" class="btn btn-outline-success m-1" value="Edit" onclick="location.href='@Url.Action("Edit", "Recipes", new { id=item.Id})'">
                 <input type="button" class="btn btn-outline-danger m-1" value="Delete" onclick="location.href='@Url.Action("Delete", "Recipes", new { id=item.Id})'">
             </td>
         </tr>

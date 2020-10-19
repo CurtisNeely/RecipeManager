@@ -32,7 +32,14 @@
             </tr>
             <tr>
                 <th>Rating</th>
-                <td>@Model.RatingAverage/5 for @Model.RatingCount ratings</td>
+                @if (Model.RatingCount == 0)
+                {
+                    <td>Unrated</td>
+                }
+                else
+                {
+                    <td>@Model.RatingAverage/5 for @Model.RatingCount ratings</td>
+                }
             </tr>
             <tr>
                 <th>Rate this Recipe?</th>
