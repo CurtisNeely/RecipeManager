@@ -10,8 +10,8 @@ using RecipeManager.Data;
 namespace RecipeManager.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201016061919_deletedRecipeCategoryModel")]
-    partial class deletedRecipeCategoryModel
+    [Migration("20201019012943_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -329,7 +329,14 @@ namespace RecipeManager.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("Photo")
+                        .IsRequired()
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<double>("RatingAverage")
+                        .HasColumnType("float");
+
+                    b.Property<int>("RatingCount")
+                        .HasColumnType("int");
 
                     b.Property<string>("Servings")
                         .IsRequired()
@@ -427,7 +434,7 @@ namespace RecipeManager.Migrations
             modelBuilder.Entity("RecipeManager.Models.Category", b =>
                 {
                     b.HasOne("RecipeManager.Models.Recipe", null)
-                        .WithMany("categories")
+                        .WithMany("Categories")
                         .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -436,7 +443,7 @@ namespace RecipeManager.Migrations
             modelBuilder.Entity("RecipeManager.Models.Ingredient", b =>
                 {
                     b.HasOne("RecipeManager.Models.Recipe", null)
-                        .WithMany("ingredients")
+                        .WithMany("Ingredients")
                         .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -445,7 +452,7 @@ namespace RecipeManager.Migrations
             modelBuilder.Entity("RecipeManager.Models.Step", b =>
                 {
                     b.HasOne("RecipeManager.Models.Recipe", null)
-                        .WithMany("steps")
+                        .WithMany("Steps")
                         .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

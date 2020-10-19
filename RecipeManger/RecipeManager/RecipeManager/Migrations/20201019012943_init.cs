@@ -49,20 +49,6 @@ namespace RecipeManager.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Categories",
-                columns: table => new
-                {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
-                    CategoryType = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Categories", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Favourites",
                 columns: table => new
                 {
@@ -74,21 +60,6 @@ namespace RecipeManager.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Favourites", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Ingredients",
-                columns: table => new
-                {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Measurement = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    RecipeId = table.Column<long>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Ingredients", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -107,53 +78,26 @@ namespace RecipeManager.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RecipeCategories",
-                columns: table => new
-                {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RecipeId = table.Column<long>(nullable: false),
-                    CategoryId = table.Column<long>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RecipeCategories", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Recipes",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
-                    Time = table.Column<string>(nullable: true),
-                    Servings = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    Photo = table.Column<byte[]>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
+                    Time = table.Column<string>(nullable: false),
+                    Servings = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(nullable: false),
+                    Photo = table.Column<byte[]>(nullable: false),
                     IsPublic = table.Column<bool>(nullable: false),
                     IsFeatured = table.Column<bool>(nullable: false),
                     UploadDate = table.Column<DateTime>(nullable: false),
+                    RatingAverage = table.Column<double>(nullable: false),
+                    RatingCount = table.Column<int>(nullable: false),
                     UserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Recipes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Steps",
-                columns: table => new
-                {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    StepNumber = table.Column<int>(nullable: false),
-                    Description = table.Column<string>(nullable: true),
-                    RecipeId = table.Column<long>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Steps", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -262,6 +206,68 @@ namespace RecipeManager.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true),
+                    RecipeId = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Categories_Recipes_RecipeId",
+                        column: x => x.RecipeId,
+                        principalTable: "Recipes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Ingredients",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Measurement = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    RecipeId = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ingredients", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Ingredients_Recipes_RecipeId",
+                        column: x => x.RecipeId,
+                        principalTable: "Recipes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Steps",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StepNumber = table.Column<int>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    RecipeId = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Steps", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Steps_Recipes_RecipeId",
+                        column: x => x.RecipeId,
+                        principalTable: "Recipes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -300,6 +306,21 @@ namespace RecipeManager.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Categories_RecipeId",
+                table: "Categories",
+                column: "RecipeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ingredients_RecipeId",
+                table: "Ingredients",
+                column: "RecipeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Steps_RecipeId",
+                table: "Steps",
+                column: "RecipeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -332,12 +353,6 @@ namespace RecipeManager.Migrations
                 name: "Ratings");
 
             migrationBuilder.DropTable(
-                name: "RecipeCategories");
-
-            migrationBuilder.DropTable(
-                name: "Recipes");
-
-            migrationBuilder.DropTable(
                 name: "Steps");
 
             migrationBuilder.DropTable(
@@ -345,6 +360,9 @@ namespace RecipeManager.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Recipes");
         }
     }
 }
