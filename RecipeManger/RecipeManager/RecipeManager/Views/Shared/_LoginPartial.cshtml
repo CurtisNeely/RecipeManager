@@ -14,7 +14,7 @@
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Recipes" asp-action="Index">Features</a></li>
+                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Recipes" asp-action="Featured">Featured</a></li>
                     <li><a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Analytics</a></li>
                     @*<li><a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Manage Account</a></li>*@
                     <li class="nav-item">
@@ -36,7 +36,7 @@
                 </button>
                 <ul class="dropdown-menu">
                     <li><a class="nav-link text-dark" asp-area="" asp-controller="Recipes" asp-action="Index">My Recipes</a></li>
-                    <li><a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Favourites</a></li>
+                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Recipes" asp-action="Favourites">Favourites</a></li>
                     @*<li><a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Manage Account</a></li>*@
                     <li class="nav-item">
                         <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">

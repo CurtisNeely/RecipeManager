@@ -6,6 +6,14 @@
 
 <h1>@Model.Name by @Model.UploaderName</h1>
 <button class="btn btn-outline-success" onclick="window.print()">Print (Print to PDF)</button>
+@if (User.IsInRole("Admin"))
+{
+    <input type="button" class="btn btn-outline-success m-1" value="Add to Featured" onclick="location.href='@Url.Action("AddToFeatured", "Recipes", new { id = Model.Id })'">
+}
+else
+{
+    <input type="button" class="btn btn-outline-success m-1" value="Add to Favourites" onclick="location.href='@Url.Action("AddToFavourites", "Recipes", new { id = Model.Id })'">
+}
 <hr />
 <div class="row">
     <div class="col-md-8">
@@ -84,11 +92,12 @@
         <th>Amount</th>
         <th>Name</th>
     </tr>
-    @foreach (var item in Model.Ingredients){
-    <tr>
-        <td>@item.Measurement</td>
-        <td>@item.Name</td>
-    </tr>
+    @foreach (var item in Model.Ingredients)
+    {
+        <tr>
+            <td>@item.Measurement</td>
+            <td>@item.Name</td>
+        </tr>
     }
 </table>
 

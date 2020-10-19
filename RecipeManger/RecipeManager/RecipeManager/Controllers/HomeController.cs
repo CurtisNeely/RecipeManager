@@ -4,7 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using RecipeManager.Data;
 using RecipeManager.Models;
 
 namespace RecipeManager.Controllers
@@ -12,15 +14,19 @@ namespace RecipeManager.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var recipes = await _context.Recipes.Where(r => r.IsFeatured == true).ToListAsync();
+
+            return View(recipes);
         }
 
         public IActionResult Privacy()

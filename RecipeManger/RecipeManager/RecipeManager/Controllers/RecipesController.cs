@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using RecipeManager.Data;
 using RecipeManager.Models;
 
@@ -32,6 +33,103 @@ namespace RecipeManager.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             return View(await _context.Recipes.Where(r => r.UserId == userId).ToListAsync());
+        }
+
+        public async Task<IActionResult> Favourites()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var recipes = await _context.Recipes
+                    .Join(
+                        _context.Favourites,
+                        recipe => recipe.Id,
+                        favourite => favourite.RecipeId,
+                        (recipe, favourite) => new { recipe, favourite })
+                    .Where(x => x.favourite.UserId == userId) //&& x.recipe.IsPublic == true
+                    .Select(x => new Recipe
+                    {
+                        Id = x.recipe.Id,
+                        Name = x.recipe.Name,
+                        Time = x.recipe.Time,
+                        Servings = x.recipe.Servings,
+                        Description = x.recipe.Description,
+                        Photo = x.recipe.Photo,
+                        IsPublic = x.recipe.IsPublic,
+                        IsFeatured = x.recipe.IsFeatured,
+                        UploadDate = x.recipe.UploadDate,
+                        RatingCount = x.recipe.RatingCount,
+                        RatingAverage = x.recipe.RatingAverage
+                    }
+                    ).ToListAsync();
+
+            return View(recipes);
+        }
+
+        public async Task<IActionResult> AddToFavourites(long id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            Favourite favourite = new Favourite() { RecipeId = id, UserId = userId };
+
+            var exists = await _context.Favourites.FirstOrDefaultAsync(f => f.RecipeId == id && f.UserId == userId);
+
+            if(exists == null)
+            {
+                _context.Favourites.Add(favourite);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Favourites", "Recipes");
+        }
+
+        public async Task<IActionResult> RemoveFromFavourites(long id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var favourite = await _context.Favourites.FirstOrDefaultAsync(f => f.RecipeId == id && f.UserId == userId);
+
+            if (favourite != null)
+            {
+                _context.Favourites.Remove(favourite);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Favourites", "Recipes");
+        }
+
+        public async Task<IActionResult> Featured()
+        {
+            var recipes = await _context.Recipes.Where(r => r.IsFeatured == true).ToListAsync();
+
+            return View(recipes);
+        }
+
+        public async Task<IActionResult> AddToFeatured(long id)
+        {
+            var recipe = await _context.Recipes.FirstOrDefaultAsync(f => f.Id == id);
+
+            if (recipe != null)
+            {
+                recipe.IsFeatured = true;
+                _context.Recipes.Update(recipe);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Featured", "Recipes");
+        }
+
+        public async Task<IActionResult> RemoveFromFeatured(long id)
+        {
+            var recipe = await _context.Recipes.FirstOrDefaultAsync(f => f.Id == id);
+
+            if (recipe != null)
+            {
+                recipe.IsFeatured = false;
+                _context.Recipes.Update(recipe);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Featured", "Recipes");
         }
 
         // GET: Recipes/Details/5
@@ -339,8 +437,10 @@ namespace RecipeManager.Controllers
                             Photo = x.recipe.Photo,
                             IsPublic = x.recipe.IsPublic,
                             IsFeatured = x.recipe.IsFeatured,
-                            UploadDate = x.recipe.UploadDate
-                        }
+                            UploadDate = x.recipe.UploadDate,
+                            RatingCount = x.recipe.RatingCount,
+                            RatingAverage = x.recipe.RatingAverage
+                    }
                     ).AsQueryable();
 
                 ViewBag.ResultCount = recipe.Count();
