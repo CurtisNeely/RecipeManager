@@ -39,6 +39,8 @@ namespace RecipeManager.Models
         [Required]
         [Display(Name = "Rating Count")]
         public int RatingCount { get; set; }
+        [Required]
+        public string UploaderName { get; set; }
 
         [ForeignKey("ApplicationUser")]
         public string UserId { get; set; }

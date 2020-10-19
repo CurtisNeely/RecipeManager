@@ -101,14 +101,17 @@ namespace RecipeManager.Controllers
                     p1 = ms1.ToArray();
                 }
 
+                var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
                 recipe.Photo = p1;
                 recipe.Ingredients = ingredients;
                 recipe.Steps = steps;
                 recipe.Categories = categories;
-                recipe.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                recipe.UserId = user.Id;
                 recipe.UploadDate = DateTime.UtcNow;
                 recipe.RatingAverage = 0;
                 recipe.RatingCount = 0;
+                recipe.UploaderName = user.FirstName;
 
                 _context.Add(recipe);
                 await _context.SaveChangesAsync();
