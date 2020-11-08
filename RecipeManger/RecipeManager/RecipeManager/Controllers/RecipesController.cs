@@ -256,7 +256,7 @@ namespace RecipeManager.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (recipe.Name != null && recipe.Time != null && recipe.Servings != null && recipe.Description != null)
             {
                 List<Ingredient> ingredients = new List<Ingredient>();
                 List<Step> steps = new List<Step>();
@@ -289,6 +289,8 @@ namespace RecipeManager.Controllers
 
                     recipe.Photo = p1;
                 }
+
+                var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
                 recipe.Ingredients = ingredients;
                 recipe.Steps = steps;
