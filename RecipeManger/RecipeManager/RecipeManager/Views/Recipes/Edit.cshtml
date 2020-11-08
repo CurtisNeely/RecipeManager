@@ -92,34 +92,6 @@
         <tr>
             <th colspan="3">Check all that apply</th>
         </tr>
-        @*@{ 
-            List<String> categories = new List<string>(){"Breakfast", "Lunch", "Dinner",
-                                                         "Brunch", "Snack", "Beverage",
-                                                         "Low Sugar", "Keto", "Paleo",
-                                                         "Vegan", "Vegetarian", "Dariy Free",
-                                                         "Gluton Free", "", ""};
-
-            for (int x = 0; x < categories.Count; x += 3)
-            {
-                <tr>
-                    @if (Model.Categories.Any(c => c.Name == categories[x].ToLower())) {
-                        <td><input type="checkbox" name="Categories" value="@categories[x].ToLower()" checked />@categories[x]</td>
-                    } else {
-                        <td><input type="checkbox" name="Categories" value="@categories[x].ToLower()" /> @categories[x]</td>
-                    }
-                    @if (Model.Categories.Any(c => c.Name == categories[x + 1].ToLower())) {
-                        <td><input type="checkbox" name="Categories" value="@categories[x + 1].ToLower()" checked /> @categories[x + 1]</td>
-                    } else {
-                        <td><input type="checkbox" name="Categories" value="@categories[x + 1].ToLower()" />  @categories[x + 1]</td>
-                    }
-                    @if (Model.Categories.Any(c => c.Name == categories[x + 2].ToLower())) {
-                        <td><input type="checkbox" name="Categories" value="@categories[x + 2].ToLower()" checked /> @categories[x + 2]</td>
-                    } else {
-                        <td><input type="checkbox" name="Categories" value="@categories[x + 2].ToLower()" /> @categories[x + 2]</td>
-                    }
-                </tr>
-            }
-        }*@
         <tr>
             <td><input type="checkbox" name="Categories" value="breakfast" @(Convert.ToBoolean(Model.Categories.Any(x => x.Name.Equals("breakfast"))) == true ? "checked = 'checked'" : string.Empty)/> Breakfast</td>
             <td><input type="checkbox" name="Categories" value="lunch" @(Convert.ToBoolean(Model.Categories.Any(x => x.Name.Equals("lunch"))) == true ? "checked = 'checked'" : string.Empty)/> Lunch</td>
@@ -141,8 +113,8 @@
             <td><input type="checkbox" name="Categories" value="dairy free" @(Convert.ToBoolean(Model.Categories.Any(x => x.Name.Equals("dairy free"))) == true ? "checked = 'checked'" : string.Empty)/> Dairy Free</td>
         </tr>
         <tr>
-            <td><input type="checkbox" name="Categories" value="gluton free" @(Convert.ToBoolean(Model.Categories.Any(x => x.Name.Equals("gluton free"))) == true ? "checked = 'checked'" : string.Empty)/> Gluton Free</td>
-            <td></td>
+            <td><input type="checkbox" name="Categories" value="gluten free" @(Convert.ToBoolean(Model.Categories.Any(x => x.Name.Equals("gluten free"))) == true ? "checked = 'checked'" : string.Empty)/> Gluten Free</td>
+            <td><input type="checkbox" name="Categories" value="dessert" @(Convert.ToBoolean(Model.Categories.Any(x => x.Name.Equals("dessert"))) == true ? "checked = 'checked'" : string.Empty) /> Dessert</td>
             <td></td>
         </tr>
     </table>

@@ -21,7 +21,7 @@ else
 <div class="row">
     <div class="col-md-3 col-lg-2 border">
         <h3>Filters</h3>
-        <form  asp-controller="Recipes" asp-action="SearchByNameAndCategory">
+        <form asp-controller="Recipes" asp-action="SearchByNameAndCategory">
             <input type="hidden" name="SearchPhrase" value="@ViewBag.SearchPhrase" />
             <div class="form-check">
                 <input class="form-check-input" type="radio" name="category" value="breakfast" checked>
@@ -96,9 +96,15 @@ else
                 </label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="category" value="gluton free">
+                <input class="form-check-input" type="radio" name="category" value="gluten free">
                 <label class="form-check-label">
-                    Gluton Free
+                    Gluten Free
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="category" value="dessert">
+                <label class="form-check-label">
+                    Dessert
                 </label>
             </div>
             <input type="submit" value="Apply Filters" class="btn btn-primary mt-1 mb-2" />
