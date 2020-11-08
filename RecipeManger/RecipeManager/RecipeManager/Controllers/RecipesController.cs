@@ -490,7 +490,7 @@ namespace RecipeManager.Controllers
             }
 
             var ratingCount = _context.Ratings.Count(r => r.RecipeId == rating.RecipeId);
-            var ratingAverage = _context.Ratings.Where(r => r.RecipeId == rating.RecipeId).Average(r => r.Stars);
+            var ratingAverage = Math.Round(_context.Ratings.Where(r => r.RecipeId == rating.RecipeId).Average(r => r.Stars), 0);
 
             var recipe = await _context.Recipes.FirstOrDefaultAsync(r => r.Id == Id);
 
