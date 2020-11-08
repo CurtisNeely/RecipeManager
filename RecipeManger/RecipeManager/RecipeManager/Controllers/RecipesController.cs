@@ -20,11 +20,13 @@ namespace RecipeManager.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public RecipesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public RecipesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             _context = context;
             _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         // GET: Recipes
@@ -487,8 +489,8 @@ namespace RecipeManager.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            var ratingCount = _context.Ratings.Count(r => r.RecipeId == rating.RecipeId && r.UserId == rating.UserId);
-            var ratingAverage = _context.Ratings.Average(r => r.Stars);
+            var ratingCount = _context.Ratings.Count(r => r.RecipeId == rating.RecipeId);
+            var ratingAverage = _context.Ratings.Where(r => r.RecipeId == rating.RecipeId).Average(r => r.Stars);
 
             var recipe = await _context.Recipes.FirstOrDefaultAsync(r => r.Id == Id);
 
