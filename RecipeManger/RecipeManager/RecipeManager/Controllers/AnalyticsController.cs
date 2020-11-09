@@ -30,6 +30,20 @@ namespace RecipeManager.Controllers
             var publicRecipeCount = _context.Recipes.Count(r => r.IsPublic == true);
             var userCount = _context.Users.Count();
 
+            var recipeList = (_context.Recipes.Where(r => r.UploadDate.Year >= 2020 && r.UploadDate.Month >= 10 && r.UploadDate.Year <= 2020 && r.UploadDate.Month <= 11)).Select( r => new 
+            {
+                Month = r.UploadDate.Month,
+                Year = r.UploadDate.Year
+            }).AsEnumerable().GroupBy(x => new { x.Year, x.Month });
+
+            List<AnalyticDate> recipeData = new List<AnalyticDate>();
+
+            foreach(var i in recipeList)
+            {
+                AnalyticDate analyticDate = new AnalyticDate() { Month = i.Key.Month, Year = i.Key.Year, Count = i.Count()};
+                recipeData.Add(analyticDate);
+            }
+
             AnalyticsViewModel analytics = new AnalyticsViewModel()
             {
                 recipeCount = recipeCount,
