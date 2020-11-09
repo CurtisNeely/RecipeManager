@@ -18,7 +18,7 @@
 </table>
 <br />
 
-<h3>Graph the Analytics</h3>
+<h3>Recipes over Time</h3>
 <form asp-action="Index">
     <div class="row">
         <div class="col">
@@ -30,12 +30,22 @@
             <input type="date" class="form-control" name="EndDate">
         </div>
     </div>
-    <input type="submit" value="Make Graphs!" class="btn btn-primary mt-2" />
+    <input type="submit" value="Make the Graph!" class="btn btn-primary mt-2" />
 </form>
 
-<canvas id="myChart"></canvas>
+<h4 class="text-center mt-3">Recipe Growth Between @Model.startDate & @Model.endDate</h4>
+<div class="row">
+    <div class="col-2">
+    </div>
+    <div class="col-8">
+        <canvas id="myChart"></canvas>
+    </div>
+    <div class="col-2">
+    </div>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <script>
+    console.log()
     var ctx = document.getElementById('myChart').getContext('2d');
     var chart = new Chart(ctx, {
         // The type of chart we want to create
@@ -43,12 +53,12 @@
 
         // The data for our dataset
         data: {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+            labels: @Html.Raw(Model.labels),
             datasets: [{
-                label: 'My First dataset',
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgb(255, 99, 132)',
-                data: [0, 10, 5, 2, 20, 30, 45]
+                label: 'Recipes',
+                backgroundColor: 'rgb( 91, 242, 109 )',
+                borderColor: 'rgb( 91, 242, 109 )',
+                data: @Html.Raw(Model.data)
             }]
         },
 

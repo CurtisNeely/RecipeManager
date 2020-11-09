@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -23,25 +25,60 @@ namespace RecipeManager.Controllers
             _signInManager = signInManager;
         }
 
-        public IActionResult Index(DateTime? StartDate, DateTime? EndDate)
+        public IActionResult Index(DateTime StartDate, DateTime EndDate)
         {
             var recipeCount = _context.Recipes.Count();
             var privateRecipeCount = _context.Recipes.Count(r => r.IsPublic == false);
             var publicRecipeCount = _context.Recipes.Count(r => r.IsPublic == true);
             var userCount = _context.Users.Count();
 
-            var recipeList = (_context.Recipes.Where(r => r.UploadDate.Year >= 2020 && r.UploadDate.Month >= 10 && r.UploadDate.Year <= 2020 && r.UploadDate.Month <= 11)).Select( r => new 
+            if (StartDate == DateTime.MinValue || EndDate == DateTime.MinValue) {
+                StartDate = DateTime.Now.AddDays(-60);
+                EndDate = DateTime.Now.AddDays(80);
+            }
+
+            var monthCount = (((EndDate.Year - StartDate.Year) * 12) + EndDate.Month - StartDate.Month) + 1;
+            var startMonth = StartDate.Month;
+            var startYear = StartDate.Year;
+
+            List<String> labels = new List<String>();
+            List<int> recipeData = new List<int>();
+
+            for (var x = 1; x <= monthCount; x++)
+            {
+                string monthName = CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(startMonth);
+                labels.Add($"{monthName} {startYear}");
+                recipeData.Add(0);
+
+                startMonth++;
+
+                if (startMonth == 13)
+                {
+                    startMonth = 1;
+                    startYear++;
+                }
+            }           
+
+            var recipeList = (_context.Recipes.Where(r => r.UploadDate >= StartDate && r.UploadDate<= EndDate)).Select( r => new 
             {
                 Month = r.UploadDate.Month,
                 Year = r.UploadDate.Year
             }).AsEnumerable().GroupBy(x => new { x.Year, x.Month });
 
-            List<AnalyticDate> recipeData = new List<AnalyticDate>();
-
             foreach(var i in recipeList)
             {
-                AnalyticDate analyticDate = new AnalyticDate() { Month = i.Key.Month, Year = i.Key.Year, Count = i.Count()};
-                recipeData.Add(analyticDate);
+                string monthYear = $"{CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(i.Key.Month)} {i.Key.Year}";
+
+                int index = labels.IndexOf(monthYear);
+                recipeData[index] = i.Count();
+            }
+
+            for ( int x = 0; x < labels.Count; x++)
+            {
+                if(x != 0)
+                {
+                    recipeData[x] = recipeData[x] + recipeData[x - 1];
+                }
             }
 
             AnalyticsViewModel analytics = new AnalyticsViewModel()
@@ -49,7 +86,11 @@ namespace RecipeManager.Controllers
                 recipeCount = recipeCount,
                 privateRecipeCount = privateRecipeCount,
                 publicRecipeCount = publicRecipeCount,
-                userCount = userCount
+                userCount = userCount,
+                startDate = labels.First(),
+                endDate = labels.Last(),
+                labels = JsonSerializer.Serialize(labels),
+                data = JsonSerializer.Serialize(recipeData)
             };
 
             return View(analytics);
