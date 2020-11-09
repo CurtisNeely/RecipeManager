@@ -22,6 +22,8 @@ namespace RecipeManager.Controllers
             _context = context;
         }
 
+        //Homepage of the application. 
+        //Get: 6 featured recipes to display
         public async Task<IActionResult> Index()
         {
             var recipes = await _context.Recipes.Where(r => r.IsFeatured == true).Take(6).ToListAsync();

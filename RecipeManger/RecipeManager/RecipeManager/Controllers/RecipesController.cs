@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,9 @@ namespace RecipeManager.Controllers
             _signInManager = signInManager;
         }
 
-        // GET: Recipes
+        //Returns the My Recipes page for the user. 
+        //Gets all the user's uploaded recipes.
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> Index()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -37,6 +40,8 @@ namespace RecipeManager.Controllers
             return View(await _context.Recipes.Where(r => r.UserId == userId).ToListAsync());
         }
 
+        //Returns the Favourites page for the user. 
+        //Gets all the user's favourited recipes.
         public async Task<IActionResult> Favourites()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -67,6 +72,9 @@ namespace RecipeManager.Controllers
             return View(recipes);
         }
 
+        //If a user clicks the 'add to favourites' button while searching
+        //the recipe will be added to the user's favourites, and the user
+        //will be redirected to their Favourites page
         public async Task<IActionResult> AddToFavourites(long id)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -84,6 +92,9 @@ namespace RecipeManager.Controllers
             return RedirectToAction("Favourites", "Recipes");
         }
 
+        //If a user clicks the 'remove from favourites' button while on their favourites page
+        //the recipe will be removed from the user's favourites, and the user
+        //will be redirected to their Favourites page
         public async Task<IActionResult> RemoveFromFavourites(long id)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -99,6 +110,8 @@ namespace RecipeManager.Controllers
             return RedirectToAction("Favourites", "Recipes");
         }
 
+        //Returns the Featured page for the admin
+        //Gets all featured recipes 
         public async Task<IActionResult> Featured()
         {
             var recipes = await _context.Recipes.Where(r => r.IsFeatured == true).ToListAsync();
@@ -106,6 +119,9 @@ namespace RecipeManager.Controllers
             return View(recipes);
         }
 
+        //If an admin clicks the 'add to featured' button while searching
+        //the recipe will be added to the admin's featured, and the admin
+        //will be redirected to their Featured page
         public async Task<IActionResult> AddToFeatured(long id)
         {
             var recipe = await _context.Recipes.FirstOrDefaultAsync(f => f.Id == id);
@@ -120,6 +136,9 @@ namespace RecipeManager.Controllers
             return RedirectToAction("Featured", "Recipes");
         }
 
+        //If an admin clicks the 'remove from featured' button while on the featured page
+        //the recipe will be removed from the admin's featured, and the admin
+        //will be redirected to their Featured page
         public async Task<IActionResult> RemoveFromFeatured(long id)
         {
             var recipe = await _context.Recipes.FirstOrDefaultAsync(f => f.Id == id);
@@ -134,7 +153,8 @@ namespace RecipeManager.Controllers
             return RedirectToAction("Featured", "Recipes");
         }
 
-        // GET: Recipes/Details/5
+        //Get: Detailed recipe. Returns a view that contains the
+        //recipe, ingredients, steps, categories, and rating
         public async Task<IActionResult> Details(long? id)
         {
             if (id == null)
@@ -157,15 +177,15 @@ namespace RecipeManager.Controllers
             return View(recipe);
         }
 
-        // GET: Recipes/Create
+        // GET: Returns the Recipe Creation Page
         public IActionResult Create()
         {
             return View();
         }
 
         // POST: Recipes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // If a valid recipe is submitted by the user, add it to the db, redirect them to their
+        // My recipes page
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Recipe recipe, IFormFile Photo, String Name, String Time, String Servings, String Description, bool IsPublic, String[] IngredientAmount, String[] IngredientName, String[] StepDescription, String[] Categories)
@@ -221,7 +241,7 @@ namespace RecipeManager.Controllers
             return View(recipe);
         }
 
-        // GET: Recipes/Edit/5
+        // Get: a recipe, and return the user to the Editing page for that recipe
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
@@ -242,9 +262,9 @@ namespace RecipeManager.Controllers
             return View(recipe);
         }
 
-        // POST: Recipes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Recipes/Edit
+        // If a valid recipe edit is submitted by the user, update the db, redirect them to their
+        // My recipes page
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(long id, Recipe recipe, IFormFile NewPhoto, String[] IngredientAmount, String[] IngredientName, String[] StepDescription, String[] Categories)
@@ -322,7 +342,8 @@ namespace RecipeManager.Controllers
             return View(recipe);
         }
 
-        // GET: Recipes/Delete/5
+        // GET: Recipes/Delete
+        // Comfirm deletion of a selected recipe
         public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
@@ -341,6 +362,7 @@ namespace RecipeManager.Controllers
         }
 
         // POST: Recipes/Delete/5
+        //Delete a selected recipe
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
@@ -352,6 +374,7 @@ namespace RecipeManager.Controllers
         }
 
         // GET: Recipes/Search/pizza
+        // Search for recipes who's name contains a search phrase
         public async Task<IActionResult> SearchByName(string SearchPhrase, int? pageNumber)
         {
             if(SearchPhrase == null)
@@ -374,6 +397,7 @@ namespace RecipeManager.Controllers
             return View("Search", await PaginatedList<Recipe>.CreateAsync(recipe.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
+        //Search for recipes who contain a category
         public async Task<IActionResult> SearchByCategory(string Category, int? pageNumber)
         {
             ViewBag.SearchCategory = Category;
@@ -411,7 +435,7 @@ namespace RecipeManager.Controllers
             return View("Search", await PaginatedList<Recipe>.CreateAsync(recipe.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
-
+        //Search for a recipe, and then filter the results by category
         public async Task<IActionResult> SearchByNameAndCategory(string SearchPhrase, string Category, int? pageNumber)
         {
 
@@ -464,6 +488,8 @@ namespace RecipeManager.Controllers
 
         }
 
+        //Rate a recipe. If the user has already rated, update the rating, 
+        //else create a new rating. Reload the recipe's page
         public async Task<IActionResult> Rate(long Id, int stars)
         {
             if (stars > 5)
@@ -508,6 +534,7 @@ namespace RecipeManager.Controllers
             return RedirectToAction(nameof(Details), new { Id = Id });
         }
 
+        //Reverse a recipe's public or private status
         public async Task<IActionResult> ReverseIsPublic(long Id)
         {
             var recipe = await _context.Recipes.FirstOrDefaultAsync(r => r.Id == Id);
@@ -528,6 +555,7 @@ namespace RecipeManager.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        //Check if a recipe exists
             private bool RecipeExists(long id)
         {
             return _context.Recipes.Any(e => e.Id == id);

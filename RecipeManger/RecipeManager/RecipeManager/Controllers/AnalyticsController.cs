@@ -25,6 +25,10 @@ namespace RecipeManager.Controllers
             _signInManager = signInManager;
         }
 
+        //The Analytics homepage. 
+        //Get: recipeCount, privateRecipeCount, publicRecipeCount, userCount
+        //and data to make a Recipe over time Graph
+        //Return the page with an AnalticsViewModel
         public IActionResult Index(DateTime StartDate, DateTime EndDate)
         {
             var recipeCount = _context.Recipes.Count();
