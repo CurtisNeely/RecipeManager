@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RecipeManager.Data;
@@ -29,6 +30,7 @@ namespace RecipeManager.Controllers
         //Get: recipeCount, privateRecipeCount, publicRecipeCount, userCount
         //and data to make a Recipe over time Graph
         //Return the page with an AnalticsViewModel
+        [Authorize(Roles = "Admin")]
         public IActionResult Index(DateTime StartDate, DateTime EndDate)
         {
             var recipeCount = _context.Recipes.Count();

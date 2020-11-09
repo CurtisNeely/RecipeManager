@@ -53,45 +53,45 @@ namespace RecipeManager.Data
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-            // Check if roles already exist and exit if there are
+            // Check if roles exist
             if (roleManager.Roles.Count() > 0)
                 return 1;  // should log an error message here
 
-            // Seed roles
+            // Seed the roles
             int result = await SeedRoles(roleManager);
             if (result != 0)
                 return 2;  // should log an error message here
 
-            // Check if users already exist and exit if there are
+            // Check if users exist
             if (userManager.Users.Count() > 0)
-                return 3;  // should log an error message here
+                return 3; 
 
-            // Seed users
+            // Seed the users
             result = await SeedUsers(userManager);
             if (result != 0)
-                return 4;  // should log an error message here
+                return 4; 
 
             return 0;
         }
 
         private static async Task<int> SeedRoles(RoleManager<IdentityRole> roleManager)
         {
-            // Create Manager Role
+            // Create Admin Role
             var result = await roleManager.CreateAsync(new IdentityRole("Admin"));
             if (!result.Succeeded)
                 return 1;  // should log an error message here
 
-            // Create Player Role
+            // Create User Role
             result = await roleManager.CreateAsync(new IdentityRole("User"));
             if (!result.Succeeded)
-                return 2;  // should log an error message here
+                return 2; 
 
             return 0;
         }
 
         private static async Task<int> SeedUsers(UserManager<ApplicationUser> userManager)
         {
-            // Create Manager User
+            // Create Admin user
             var adminUser = new ApplicationUser
             {
                 UserName = "admin@recipe.ca",
@@ -102,14 +102,14 @@ namespace RecipeManager.Data
             };
             var result = await userManager.CreateAsync(adminUser, "Password!1");
             if (!result.Succeeded)
-                return 1;  // should log an error message here
+                return 1; 
 
-            // Assign user to Manager role
+            // Assign user to Admin Role
             result = await userManager.AddToRoleAsync(adminUser, "Admin");
             if (!result.Succeeded)
-                return 2;  // should log an error message here
+                return 2; 
 
-            // Create Player User
+            // Create user
             var memberUser = new ApplicationUser
             {
                 UserName = "user@recipe.ca",
@@ -120,12 +120,12 @@ namespace RecipeManager.Data
             };
             result = await userManager.CreateAsync(memberUser, "Password!1");
             if (!result.Succeeded)
-                return 3;  // should log an error message here
+                return 3;  
 
-            // Assign user to Player role
+            // Assign user to User role
             result = await userManager.AddToRoleAsync(memberUser, "User");
             if (!result.Succeeded)
-                return 4;  // should log an error message here
+                return 4; 
 
             return 0;
         }

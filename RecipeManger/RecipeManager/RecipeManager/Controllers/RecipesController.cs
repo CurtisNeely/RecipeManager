@@ -42,6 +42,7 @@ namespace RecipeManager.Controllers
 
         //Returns the Favourites page for the user. 
         //Gets all the user's favourited recipes.
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> Favourites()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -75,6 +76,7 @@ namespace RecipeManager.Controllers
         //If a user clicks the 'add to favourites' button while searching
         //the recipe will be added to the user's favourites, and the user
         //will be redirected to their Favourites page
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> AddToFavourites(long id)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -95,6 +97,7 @@ namespace RecipeManager.Controllers
         //If a user clicks the 'remove from favourites' button while on their favourites page
         //the recipe will be removed from the user's favourites, and the user
         //will be redirected to their Favourites page
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> RemoveFromFavourites(long id)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -112,6 +115,7 @@ namespace RecipeManager.Controllers
 
         //Returns the Featured page for the admin
         //Gets all featured recipes 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Featured()
         {
             var recipes = await _context.Recipes.Where(r => r.IsFeatured == true).ToListAsync();
@@ -122,6 +126,7 @@ namespace RecipeManager.Controllers
         //If an admin clicks the 'add to featured' button while searching
         //the recipe will be added to the admin's featured, and the admin
         //will be redirected to their Featured page
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddToFeatured(long id)
         {
             var recipe = await _context.Recipes.FirstOrDefaultAsync(f => f.Id == id);
@@ -139,6 +144,7 @@ namespace RecipeManager.Controllers
         //If an admin clicks the 'remove from featured' button while on the featured page
         //the recipe will be removed from the admin's featured, and the admin
         //will be redirected to their Featured page
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> RemoveFromFeatured(long id)
         {
             var recipe = await _context.Recipes.FirstOrDefaultAsync(f => f.Id == id);
@@ -178,6 +184,7 @@ namespace RecipeManager.Controllers
         }
 
         // GET: Returns the Recipe Creation Page
+        [Authorize(Roles = "User")]
         public IActionResult Create()
         {
             return View();
@@ -188,6 +195,7 @@ namespace RecipeManager.Controllers
         // My recipes page
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> Create(Recipe recipe, IFormFile Photo, String Name, String Time, String Servings, String Description, bool IsPublic, String[] IngredientAmount, String[] IngredientName, String[] StepDescription, String[] Categories)
         {
 
@@ -242,6 +250,7 @@ namespace RecipeManager.Controllers
         }
 
         // Get: a recipe, and return the user to the Editing page for that recipe
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
@@ -267,6 +276,7 @@ namespace RecipeManager.Controllers
         // My recipes page
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> Edit(long id, Recipe recipe, IFormFile NewPhoto, String[] IngredientAmount, String[] IngredientName, String[] StepDescription, String[] Categories)
         {
             var oldIngredients = await _context.Ingredients.Where(i => i.RecipeId == recipe.Id).ToListAsync();
@@ -344,6 +354,7 @@ namespace RecipeManager.Controllers
 
         // GET: Recipes/Delete
         // Comfirm deletion of a selected recipe
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
@@ -365,6 +376,7 @@ namespace RecipeManager.Controllers
         //Delete a selected recipe
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
             var recipe = await _context.Recipes.FindAsync(id);
@@ -490,6 +502,7 @@ namespace RecipeManager.Controllers
 
         //Rate a recipe. If the user has already rated, update the rating, 
         //else create a new rating. Reload the recipe's page
+        [Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> Rate(long Id, int stars)
         {
             if (stars > 5)
@@ -535,6 +548,7 @@ namespace RecipeManager.Controllers
         }
 
         //Reverse a recipe's public or private status
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> ReverseIsPublic(long Id)
         {
             var recipe = await _context.Recipes.FirstOrDefaultAsync(r => r.Id == Id);
