@@ -1,12 +1,12 @@
 # RecipeManager
 
 ### Test User Login:
-#### username: user@recipe.ca
-#### password: Password!1
+* username: user@recipe.ca
+* password: Password!1
 
 ### Test Admin Login:
-#### username: admin@recipe.ca
-#### password: Password!1
+* username: admin@recipe.ca
+* password: Password!1
 
 ### Building Locally
 1. Download the repository from https://github.com/CurtisNeely/RecipeManager
