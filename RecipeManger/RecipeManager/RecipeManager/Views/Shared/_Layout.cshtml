@@ -15,12 +15,15 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-inline-block m-auto">
-                    <ul class="navbar-nav w-100">
-                        <li class="nav-item m-auto">
+                <div class="navbar-collapse collapse d-inline-block">
+                    <ul class="navbar-nav m-auto">
+                        <li class="nav-item pr-5">
                             <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/images/recipeIcon.png" class="navbar-toggler-icon" /></a>
                         </li>
-                        <li class="nav-item m-auto">
+                        <li class="nav-item pr-5">
+                            <a class="nav-link text-dark" asp-controller="Home" asp-action="About">About<sup style="color:red";>NEW</sup></a>
+                        </li>
+                        <li class="nav-item m-auto pr-5">
                             <form asp-controller="Recipes" asp-action="SearchByName" class="form-inline nav-item">
                                 <div class="dropdown  mr-1">
                                     <button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown">
