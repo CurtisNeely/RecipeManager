@@ -26,32 +26,32 @@
                         <li class="nav-item m-auto pr-5">
                             <form asp-controller="Recipes" asp-action="SearchByName" class="form-inline nav-item">
                                 <div class="dropdown  mr-1">
-                                    <button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown">
+                                    <button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown">
                                         Categories
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li><a class="nav-link text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "breakfast"})'>Breakfast</a></li>
-                                        <li><a class="nav-link text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "lunch"})'>Lunch</a></li>
-                                        <li><a class="nav-link text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "dinner"})'>Dinner</a></li>
+                                        <li><a class="dropdown-item text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "breakfast"})'>Breakfast</a></li>
+                                        <li><a class="dropdown-item text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "brunch"})'>Brunch</a></li>
+                                        <li><a class="dropdown-item text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "lunch"})'>Lunch</a></li>
+                                        <li><a class="dropdown-item text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "dinner"})'>Dinner</a></li>
+                                        <li><a class="dropdown-item text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "dessert"})'>Dessert</a></li>
 
-                                        <li><a class="nav-link text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "brunch"})'>Brunch</a></li>
-                                        <li><a class="nav-link text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "snack"})'>Snack</a></li>
-                                        <li><a class="nav-link text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "beverage"})'>Beverages</a></li>
+                                        <li><a class="dropdown-item text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "snack"})'>Snack</a></li>
+                                        <li><a class="dropdown-item text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "beverage"})'>Beverages</a></li>
 
-                                        <li><a class="nav-link text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "low sugar"})'>Low Sugar</a></li>
-                                        <li><a class="nav-link text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "keto"})'>Keto</a></li>
-                                        <li><a class="nav-link text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "paleo"})'>Paleo</a></li>
+                                        <li><a class="dropdown-item text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "low sugar"})'>Low Sugar</a></li>
+                                        <li><a class="dropdown-item text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "keto"})'>Keto</a></li>
+                                        <li><a class="dropdown-item text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "paleo"})'>Paleo</a></li>
 
-                                        <li><a class="nav-link text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "vegan"})'>Vegan</a></li>
-                                        <li><a class="nav-link text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "vegetarian"})'>Vegetarian</a></li>
-                                        <li><a class="nav-link text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "dairy free"})'>Dairy Free</a></li>
+                                        <li><a class="dropdown-item text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "vegan"})'>Vegan</a></li>
+                                        <li><a class="dropdown-item text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "vegetarian"})'>Vegetarian</a></li>
+                                        <li><a class="dropdown-item text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "dairy free"})'>Dairy Free</a></li>
 
-                                        <li><a class="nav-link text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "gluten free"})'>Gluten Free</a></li>
-                                        <li><a class="nav-link text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "dessert"})'>Dessert</a></li>
+                                        <li><a class="dropdown-item text-dark" href='@Url.Action("SearchByCategory", "Recipes", new { category = "gluten free"})'>Gluten Free</a></li>
                                     </ul>
                                 </div>
-                                <input class="form-control mr-sm-1" type="search" name="SearchPhrase" placeholder="Search" aria-label="Search">
+                                <input class="form-control mr-sm-1 border-success" type="search" name="SearchPhrase" placeholder="Search" aria-label="Search">
                                 <button class="btn btn-outline-success my-1 my-sm-0" type="submit">Search</button>
                             </form>
                         </li>

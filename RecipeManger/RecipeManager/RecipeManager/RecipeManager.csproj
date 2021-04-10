@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\images\recipeIcon.png" />
+    <None Include="wwwroot\images\recipeIconOld.png" />
   </ItemGroup>
 
 </Project>
