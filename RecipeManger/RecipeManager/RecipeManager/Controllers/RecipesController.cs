@@ -433,7 +433,9 @@ namespace RecipeManager.Controllers
                         Photo = x.recipe.Photo,
                         IsPublic = x.recipe.IsPublic,
                         IsFeatured = x.recipe.IsFeatured,
-                        UploadDate = x.recipe.UploadDate
+                        UploadDate = x.recipe.UploadDate,
+                        RatingCount = x.recipe.RatingCount,
+                        RatingAverage = x.recipe.RatingAverage
                     }
                     ).AsQueryable();
 

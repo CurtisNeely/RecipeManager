@@ -112,52 +112,43 @@ else
     </div>
     <div class="col-md-9 col-lg-10">
         <table class="table table-bordered">
-            <thead class="text-center">
-                <tr>
-                    <th>
-                    </th>
-                    <th>
-                        Time
-                    </th>
-                    <th>
-                        Servings
-                    </th>
-                    <th>
-                        Description
-                    </th>
-                    <th>
-                        Rating
-                    </th>
-                </tr>
-            </thead>
             <tbody>
                 @foreach (var item in Model)
                 {
-                <tr>
-                    <td>
-                        <img class="card-img-top m-auto d-block" src="data:image/jpeg;base64,@Convert.ToBase64String(item.Photo)" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; cursor: pointer;" onclick="location.href='@Url.Action("Details", "Recipes", new { id=item.Id})'" />
-                        <h5 class="card-title text-center">@Html.DisplayFor(modelItem => item.Name)</h5>
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Time)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Servings)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    @if (item.RatingCount == 0)
-                    {
-                        <td>Unrated</td>
-                    }
-                    else {
-                        <td>@item.RatingAverage/5 for @item.RatingCount ratings</td>
-                    }
-                </tr>
+                    <tr>
+                        <td rowspan="4" class="w-25">
+                            <img class="card-img-top m-auto d-block" src="data:image/jpeg;base64,@Convert.ToBase64String(item.Photo)" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; cursor: pointer;" onclick="location.href='@Url.Action("Details", "Recipes", new { id=item.Id})'" />
+                            <h5 class="card-title text-center">@Html.DisplayFor(modelItem => item.Name)</h5>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Time: </b>@item.Time</td>
+                        <td rowspan="3"><b>Description</b><br />@item.Description</td>
+                    </tr>
+                    <tr>
+                        <td><b>Servings: </b>@item.Servings</td>
+                    </tr>
+                    <tr>
+                        @if(item.RatingCount == 0)
+                        {
+                            <td>Unrated</td>
+                        }
+                        else
+                        {
+                            <td>
+                                @for (var x = 0; x < item.RatingAverage; x++)
+                                {
+                                    <img style="width:25px; height:25px;" src="~/images/ratingIcon.png" />
+                                }
+                            </td>
+                        }
+                    </tr>
+                    <tr>
+                        <td colspan="3"></td>
+                    </tr>
                 }
             </tbody>
-        </table>
+            </table>
 
         @{
             var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";

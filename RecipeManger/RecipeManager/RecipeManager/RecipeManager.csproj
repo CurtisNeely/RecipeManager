@@ -23,8 +23,4 @@
     <Folder Include="Data\Migrations\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="wwwroot\images\recipeIconOld.png" />
-  </ItemGroup>
-
 </Project>
