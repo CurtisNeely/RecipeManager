@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using RecipeManager.Data;
 using RecipeManager.Models;
+using RecipeManager.Services;
 
 namespace RecipeManager.Controllers
 {
@@ -22,12 +23,14 @@ namespace RecipeManager.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly RecipeService _RecipeService;
 
-        public RecipesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public RecipesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RecipeService recipeService)
         {
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
+            _RecipeService = recipeService;
         }
 
         //Returns the My Recipes page for the user. 
