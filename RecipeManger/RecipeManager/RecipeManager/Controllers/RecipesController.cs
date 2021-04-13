@@ -50,30 +50,9 @@ namespace RecipeManager.Controllers
         [Authorize]
         public async Task<IActionResult> Favourites()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var recipes = await _context.Recipes
-                    .Join(
-                        _context.Favourites,
-                        recipe => recipe.Id,
-                        favourite => favourite.RecipeId,
-                        (recipe, favourite) => new { recipe, favourite })
-                    .Where(x => x.favourite.UserId == userId) //&& x.recipe.IsPublic == true
-                    .Select(x => new Recipe
-                    {
-                        Id = x.recipe.Id,
-                        Name = x.recipe.Name,
-                        Time = x.recipe.Time,
-                        Servings = x.recipe.Servings,
-                        Description = x.recipe.Description,
-                        Photo = x.recipe.Photo,
-                        IsPublic = x.recipe.IsPublic,
-                        IsFeatured = x.recipe.IsFeatured,
-                        UploadDate = x.recipe.UploadDate,
-                        RatingCount = x.recipe.RatingCount,
-                        RatingAverage = x.recipe.RatingAverage
-                    }
-                    ).ToListAsync();
+            var recipes = await _RecipeService.GetFavouritesByUserID(userID);
 
             return View(recipes);
         }

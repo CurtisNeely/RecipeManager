@@ -24,6 +24,34 @@ namespace RecipeManager.Services
             return recipes;
         }
 
+        public async Task<List<Recipe>> GetFavouritesByUserID(string userID)
+        {
+            var recipes = await _RecipeContext.Recipes
+                    .Join(
+                        _RecipeContext.Favourites,
+                        recipe => recipe.Id,
+                        favourite => favourite.RecipeId,
+                        (recipe, favourite) => new { recipe, favourite })
+                    .Where(x => x.favourite.UserId == userID)
+                    .Select(x => new Recipe
+                    {
+                        Id = x.recipe.Id,
+                        Name = x.recipe.Name,
+                        Time = x.recipe.Time,
+                        Servings = x.recipe.Servings,
+                        Description = x.recipe.Description,
+                        Photo = x.recipe.Photo,
+                        IsPublic = x.recipe.IsPublic,
+                        IsFeatured = x.recipe.IsFeatured,
+                        UploadDate = x.recipe.UploadDate,
+                        RatingCount = x.recipe.RatingCount,
+                        RatingAverage = x.recipe.RatingAverage
+                    }
+                    ).ToListAsync();
+
+            return recipes;
+        }
+
         public IQueryable<Recipe> SearchRecipesByCategory(string category)
         {
             var recipes = _RecipeContext.Recipes
