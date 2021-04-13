@@ -66,12 +66,19 @@ namespace RecipeManager.Services
             await _RecipeContext.SaveChangesAsync();
         }
 
-        //public async Task<Recipe> GetRecipeByID(long recipeID)
-        //{
-        //    var exists = await _RecipeContext.Recipes.FirstOrDefaultAsync(r => r.Id == recipeID);
+        public async Task<Favourite> GetFavouriteByRecipeIDAndUserID(long recipeID, string userID)
+        {
+            var favourite = await _RecipeContext.Favourites.FirstOrDefaultAsync(f => f.RecipeId == recipeID && f.UserId == userID);
 
+            return favourite;
+        }
 
-        //}
+        public async Task DeleteFavouriteAsync(Favourite favourite)
+        {
+            _RecipeContext.Favourites.Remove(favourite);
+
+            await _RecipeContext.SaveChangesAsync();
+        }
 
         public IQueryable<Recipe> SearchRecipesByCategory(string category)
         {

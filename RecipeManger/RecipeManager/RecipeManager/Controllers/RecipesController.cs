@@ -84,16 +84,20 @@ namespace RecipeManager.Controllers
         //the recipe will be removed from the user's favourites, and the user
         //will be redirected to their Favourites page
         [Authorize]
-        public async Task<IActionResult> RemoveFromFavourites(long id)
+        public async Task<IActionResult> DeleteFromFavourites(long recipeID)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var recipe = await _RecipeService.GetRecipeByIDAsync(recipeID);
 
-            var favourite = await _context.Favourites.FirstOrDefaultAsync(f => f.RecipeId == id && f.UserId == userId);
-
-            if (favourite != null)
+            if (recipe != null)
             {
-                _context.Favourites.Remove(favourite);
-                await _context.SaveChangesAsync();
+                var userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                var favourite = await _RecipeService.GetFavouriteByRecipeIDAndUserID(recipeID, userID);
+
+                if(favourite != null)
+                {
+                    await _RecipeService.DeleteFavouriteAsync(favourite);
+                }
             }
 
             return RedirectToAction("Favourites", "Recipes");
