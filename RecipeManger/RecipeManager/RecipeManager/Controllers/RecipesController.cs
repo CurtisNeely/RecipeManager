@@ -38,9 +38,11 @@ namespace RecipeManager.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            return View(await _context.Recipes.Where(r => r.UserId == userId).ToListAsync());
+            var recipes = await _RecipeService.GetRecipesByUserID(userID);
+
+            return View(recipes);
         }
 
         //Returns the Favourites page for the user. 

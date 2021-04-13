@@ -1,4 +1,5 @@
-﻿using RecipeManager.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using RecipeManager.Data;
 using RecipeManager.Models;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,13 @@ namespace RecipeManager.Services
         public RecipeService(ApplicationDbContext recipeContext)
         {
             _RecipeContext = recipeContext;
+        }
+
+        public async Task<List<Recipe>> GetRecipesByUserID(string userID)
+        {
+            var recipes = await _RecipeContext.Recipes.Where(r => r.UserId == userID).ToListAsync();
+
+            return recipes;
         }
 
         public IQueryable<Recipe> SearchRecipesByCategory(string category)
