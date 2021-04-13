@@ -61,18 +61,20 @@ namespace RecipeManager.Controllers
         //the recipe will be added to the user's favourites, and the user
         //will be redirected to their Favourites page
         [Authorize]
-        public async Task<IActionResult> AddToFavourites(long id)
+        public async Task<IActionResult> AddToFavourites(long recipeID)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var recipe = await _RecipeService.GetRecipeByIDAsync(recipeID);
 
-            Favourite favourite = new Favourite() { RecipeId = id, UserId = userId };
-
-            var exists = await _context.Favourites.FirstOrDefaultAsync(f => f.RecipeId == id && f.UserId == userId);
-
-            if(exists == null)
+            if (recipe != null)
             {
-                _context.Favourites.Add(favourite);
-                await _context.SaveChangesAsync();
+                if (recipe.IsPublic)
+                {
+                    var userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                    Favourite favourite = new Favourite() { RecipeId = recipeID, UserId = userID };
+
+                    await _RecipeService.AddFavouriteAsync(favourite);
+                }
             }
 
             return RedirectToAction("Favourites", "Recipes");

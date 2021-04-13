@@ -52,6 +52,27 @@ namespace RecipeManager.Services
             return recipes;
         }
 
+        public async Task<Recipe> GetRecipeByIDAsync(long recipeID)
+        {
+            var recipe = await _RecipeContext.Recipes.FirstOrDefaultAsync(r => r.Id == recipeID);
+
+            return recipe;         
+        }
+
+        public async Task AddFavouriteAsync(Favourite favourite)
+        {
+            _RecipeContext.Favourites.Add(favourite);
+
+            await _RecipeContext.SaveChangesAsync();
+        }
+
+        //public async Task<Recipe> GetRecipeByID(long recipeID)
+        //{
+        //    var exists = await _RecipeContext.Recipes.FirstOrDefaultAsync(r => r.Id == recipeID);
+
+
+        //}
+
         public IQueryable<Recipe> SearchRecipesByCategory(string category)
         {
             var recipes = _RecipeContext.Recipes
