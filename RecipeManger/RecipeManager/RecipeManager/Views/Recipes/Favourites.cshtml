@@ -55,7 +55,7 @@
                     <td>@item.RatingAverage/5 for @item.RatingCount ratings</td>
                 }
                 <td>
-                    <input type="button" class="btn btn-outline-danger m-1" value="Remove From Favourites" onclick="location.href='@Url.Action("RemoveFromFavourites", "Recipes", new { id=item.Id})'">
+                    <input type="button" class="btn btn-outline-danger m-1" value="Remove From Favourites" onclick="location.href='@Url.Action("DeleteFromFavourites", "Recipes", new { recipeID = item.Id})'">
                 </td>
             </tr>
 }
