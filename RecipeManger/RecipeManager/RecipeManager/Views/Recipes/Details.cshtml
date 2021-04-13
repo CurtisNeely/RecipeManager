@@ -9,11 +9,11 @@
 @if (User.Identity.IsAuthenticated){
     @if (User.IsInRole("Admin"))
     {
-    <input type="button" class="btn btn-outline-success m-1" value="Add to Featured" onclick="location.href='@Url.Action("AddToFeatured", "Recipes", new { id = Model.Id })'">
+    <input type="button" class="btn btn-outline-success m-1" value="Add to Featured" onclick="location.href='@Url.Action("AddToFeatured", "Recipes", new { recipeID = Model.Id })'">
     }
     else
     {
-    <input type="button" class="btn btn-outline-success m-1" value="Add to Favourites" onclick="location.href='@Url.Action("AddToFavourites", "Recipes", new { id = Model.Id })'">
+    <input type="button" class="btn btn-outline-success m-1" value="Add to Favourites" onclick="location.href='@Url.Action("AddToFavourites", "Recipes", new { recipeID = Model.Id })'">
     }
 }
 <hr />
