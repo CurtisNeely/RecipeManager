@@ -123,7 +123,7 @@ namespace RecipeManager.Controllers
 
             if (recipe != null)
             {
-                await _RecipeService.UpdateRecipeToFeaturedAsync(recipe);
+                await _RecipeService.UpdateRecipeIsFeaturedTrue(recipe);
             }
             else
             {
@@ -137,15 +137,17 @@ namespace RecipeManager.Controllers
         //the recipe will be removed from the admin's featured, and the admin
         //will be redirected to their Featured page
         [Authorize]
-        public async Task<IActionResult> RemoveFromFeatured(long id)
+        public async Task<IActionResult> RemoveFromFeatured(long recipeID)
         {
-            var recipe = await _context.Recipes.FirstOrDefaultAsync(f => f.Id == id);
+            var recipe = await _RecipeService.GetRecipeByIDAsync(recipeID);
 
             if (recipe != null)
             {
-                recipe.IsFeatured = false;
-                _context.Recipes.Update(recipe);
-                await _context.SaveChangesAsync();
+                await _RecipeService.UpdateRecipeIsFeaturedFalse(recipe);
+            }
+            else
+            {
+                return NotFound();
             }
 
             return RedirectToAction("Featured", "Recipes");
