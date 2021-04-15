@@ -105,6 +105,27 @@ namespace RecipeManager.Services
             await _RecipeContext.SaveChangesAsync();
         }
 
+        public async Task<List<Ingredient>> GetRecipeIngredientsByRecipeID(long recipeID)
+        {
+            var ingredients = await _RecipeContext.Ingredients.Where(i => i.RecipeId == recipeID).ToListAsync();
+
+            return ingredients;
+        }
+
+        public async Task<List<Step>> GetRecipeStepsByRecipeID(long recipeID)
+        {
+            var steps = await _RecipeContext.Steps.Where(s => s.RecipeId == recipeID).ToListAsync();
+
+            return steps;
+        }
+
+        public async Task<List<Category>> GetRecipeCategoryByRecipeID(long recipeID)
+        {
+            var categories = await _RecipeContext.Categories.Where(c => c.RecipeId == recipeID).ToListAsync();
+
+            return categories;
+        }
+
         public IQueryable<Recipe> SearchRecipesByCategory(string category)
         {
             var recipes = _RecipeContext.Recipes

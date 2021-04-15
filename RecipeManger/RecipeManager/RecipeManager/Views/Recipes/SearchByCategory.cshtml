@@ -14,7 +14,7 @@
                 {
                 <tr>
                     <td rowspan="4" class="w-25">
-                        <img class="card-img-top m-auto d-block" src="data:image/jpeg;base64,@Convert.ToBase64String(item.Photo)" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; cursor: pointer;" onclick="location.href='@Url.Action("Details", "Recipes", new { id=item.Id})'" />
+                        <img class="card-img-top m-auto d-block" src="data:image/jpeg;base64,@Convert.ToBase64String(item.Photo)" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; cursor: pointer;" onclick="location.href='@Url.Action("Details", "Recipes", new { recipeID=item.Id})'" />
                         <h5 class="card-title text-center">@Html.DisplayFor(modelItem => item.Name)</h5>
                     </td>
                 </tr>

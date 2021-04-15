@@ -155,21 +155,17 @@ namespace RecipeManager.Controllers
 
         //Get: Detailed recipe. Returns a view that contains the
         //recipe, ingredients, steps, categories, and rating
-        public async Task<IActionResult> Details(long? id)
+        public async Task<IActionResult> Details(long recipeID)
         {
-            if (id == null)
+            var recipe = await _RecipeService.GetRecipeByIDAsync(recipeID);
+
+            if (recipe != null)
             {
-                return NotFound();
+                recipe.Ingredients = await _RecipeService.GetRecipeIngredientsByRecipeID(recipeID);
+                recipe.Steps = await _RecipeService.GetRecipeStepsByRecipeID(recipeID);
+                recipe.Categories = await _RecipeService.GetRecipeCategoryByRecipeID(recipeID);
             }
-
-            var recipe = await _context.Recipes
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            recipe.Ingredients = await _context.Ingredients.Where(i => i.RecipeId == recipe.Id).ToListAsync();
-            recipe.Steps = await _context.Steps.Where(s => s.RecipeId == recipe.Id).ToListAsync();
-            recipe.Categories = await _context.Categories.Where(c => c.RecipeId == recipe.Id).ToListAsync();
-
-            if (recipe == null)
+            else
             {
                 return NotFound();
             }
