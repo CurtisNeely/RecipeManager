@@ -117,15 +117,17 @@ namespace RecipeManager.Controllers
         //the recipe will be added to the admin's featured, and the admin
         //will be redirected to their Featured page
         [Authorize]
-        public async Task<IActionResult> AddToFeatured(long id)
+        public async Task<IActionResult> AddToFeatured(long recipeID)
         {
-            var recipe = await _context.Recipes.FirstOrDefaultAsync(f => f.Id == id);
+            var recipe = await _RecipeService.GetRecipeByIDAsync(recipeID);
 
             if (recipe != null)
             {
-                recipe.IsFeatured = true;
-                _context.Recipes.Update(recipe);
-                await _context.SaveChangesAsync();
+                await _RecipeService.UpdateRecipeToFeaturedAsync(recipe);
+            }
+            else
+            {
+                return NotFound();
             }
 
             return RedirectToAction("Featured", "Recipes");
