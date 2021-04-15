@@ -87,6 +87,15 @@ namespace RecipeManager.Services
             return recipes;
         }
 
+        public async Task UpdateRecipeToFeaturedAsync(Recipe recipe)
+        {
+            recipe.IsFeatured = true;
+
+            _RecipeContext.Recipes.Update(recipe);
+
+            await _RecipeContext.SaveChangesAsync();
+        }
+
         public IQueryable<Recipe> SearchRecipesByCategory(string category)
         {
             var recipes = _RecipeContext.Recipes
