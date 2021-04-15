@@ -108,7 +108,7 @@ namespace RecipeManager.Controllers
         [Authorize]
         public async Task<IActionResult> Featured()
         {
-            var recipes = await _context.Recipes.Where(r => r.IsFeatured == true).ToListAsync();
+            var recipes = await _RecipeService.GetAllFeaturedRecipes();
 
             return View(recipes);
         }

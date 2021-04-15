@@ -80,6 +80,13 @@ namespace RecipeManager.Services
             await _RecipeContext.SaveChangesAsync();
         }
 
+        public async Task<List<Recipe>> GetAllFeaturedRecipes()
+        {
+            var recipes = await _RecipeContext.Recipes.Where(r => r.IsFeatured == true).ToListAsync();
+
+            return recipes;
+        }
+
         public IQueryable<Recipe> SearchRecipesByCategory(string category)
         {
             var recipes = _RecipeContext.Recipes
